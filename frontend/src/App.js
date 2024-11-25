@@ -1,20 +1,49 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SearchPage from "./component/SearchPage";
-import ResultPage from "./component/ResultPage";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LoginPage from "./component/Login";
-import SearchTable from "./component/SearchTable";
+import SearchPage from "./component/SearchPage";
+import SearchAdminPage from "./component/SearchAdminPage";
+import Navbar from "./component/Navbar";
+import { AuthProvider } from "./component/AuthContext";
+import ProtectedRoute from "./component/ProtectedRoute";
+import ResultPage from "./component/ResultPage";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/search" element={<SearchTable />} />
-        <Route path="/results" element={<ResultPage />} />
-        <Route path="/search_" element={<SearchPage />} />
-      </Routes>
-    </Router>
+    <BrowserRouter>
+      <AuthProvider>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/search"
+            element={
+              <ProtectedRoute>
+                <SearchPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/adminsearch"
+            element={
+              <ProtectedRoute>
+                <SearchAdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/results"
+            element={
+              <ProtectedRoute>
+                <ResultPage />
+              </ProtectedRoute>
+            }
+          />
+          
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 

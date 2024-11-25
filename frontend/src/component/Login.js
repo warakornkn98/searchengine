@@ -1,30 +1,24 @@
-import React, { useState } from "react";
-import { Form, Input, Button, Card, message } from "antd";
+import React, { useState, useContext, useEffect } from "react";
+import { Form, Input, Button, Card } from "antd";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { AuthContext } from "./AuthContext";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { isLoggedIn, login } = useContext(AuthContext);
+
+  // ตรวจสอบสถานะการเข้าสู่ระบบ
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/search"); // เปลี่ยนเส้นทางไปหน้า /search
+    }
+  }, [isLoggedIn, navigate]);
 
   const onFinish = async (values) => {
     setLoading(true);
-    try {
-      const response = await axios.post("http://localhost:5000/api/login", {
-        username: values.username,
-        password: values.password,
-      });
-
-      localStorage.setItem("userData.token", response.data.token);
-      message.success("เข้าสู่ระบบสำเร็จ");
-
-      navigate("/search");
-    } catch (error) {
-      console.error(error);
-      message.error("เข้าสู่ระบบล้มเหลว โปรดลองอีกครั้ง");
-    } finally {
-      setLoading(false);
-    }
+    await login(values.username, values.password, navigate);
+    setLoading(false);
   };
 
   return (

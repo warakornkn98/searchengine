@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Layout, Input, Button, Form, Row, Col, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from "./Navbar";
 
 const { Header, Content } = Layout;
 
@@ -35,7 +36,7 @@ const SearchPage = () => {
 
   return (
     <Layout>
-      <Header style={{ background: "#001529", padding: "10px" }}>
+      <Header style={{ background: "#001529"}}>
         <h1
           style={{
             color: "#fff",
@@ -77,32 +78,6 @@ const SearchPage = () => {
                   style={{ height: "50px", fontSize: "16px" }}
                 />
               </Form.Item>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item
-                    label="ชื่อ"
-                    name="fname"
-                    rules={[{ required: true, message: "กรุณากรอกชื่อ" }]}
-                  >
-                    <Input
-                      placeholder="กรุณากรอกชื่อ"
-                      style={{ height: "50px", fontSize: "16px" }}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="นามสกุล"
-                    name="lname"
-                    rules={[{ required: true, message: "กรุณากรอกนามสกุล" }]}
-                  >
-                    <Input
-                      placeholder="กรุณากรอกนามสกุล"
-                      style={{ height: "50px", fontSize: "16px" }}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
 
               <Form.Item>
                 <Button
