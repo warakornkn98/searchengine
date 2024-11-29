@@ -1,24 +1,32 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Form, Input, Button, Card } from "antd";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext";
+import React, { useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
+import { Card, Form, Input, Button, message } from "antd";
+import { useAuth } from "../context/AuthContext";
+import api from "../utils/api";
 
-const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
+const LoginForm = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, login } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  // ตรวจสอบสถานะการเข้าสู่ระบบ
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/search"); // เปลี่ยนเส้นทางไปหน้า /search
-    }
-  }, [isLoggedIn, navigate]);
+  if (isAuthenticated) {
+    return <Navigate to="/search" />;
+  }
 
   const onFinish = async (values) => {
-    setLoading(true);
-    await login(values.username, values.password, navigate);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { data } = await api.post("/login", values);
+      login(data.token);
+      console.log(data.token);
+      navigate('/search')
+      message.success("Login successful!");
+    } catch (error) {
+      message.error("Invalid credentials!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -28,39 +36,33 @@ const LoginPage = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        backgroundColor: "#f0f2f5",
       }}
     >
-      <Card title="เข้าสู่ระบบ" style={{ width: 400 }}>
-        <Form
-          name="login"
-          layout="vertical"
-          onFinish={onFinish}
-          autoComplete="off"
-        >
+      <Card
+        title="Login"
+        style={{
+          width: 400,
+          borderRadius: "8px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Form onFinish={onFinish}>
           <Form.Item
-            label="ชื่อผู้ใช้"
             name="username"
-            rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้!" }]}
+            rules={[{ required: true, message: "Please enter your username!" }]}
           >
-            <Input placeholder="ชื่อผู้ใช้" />
+            <Input placeholder="Username" />
           </Form.Item>
-
           <Form.Item
-            label="รหัสผ่าน"
             name="password"
-            rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน!" }]}
+            rules={[{ required: true, message: "Please enter your password!" }]}
           >
-            <Input.Password placeholder="รหัสผ่าน" />
+            <Input.Password placeholder="Password" />
           </Form.Item>
-
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={loading}
-              style={{ width: "100%" }}
-            >
-              เข้าสู่ระบบ
+            <Button type="primary" htmlType="submit" loading={loading} block>
+              Login
             </Button>
           </Form.Item>
         </Form>
@@ -69,4 +71,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginForm;

@@ -1,31 +1,24 @@
 import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import LoginPage from "./component/Login";
-import SearchPage from "./component/SearchPage";
+import LoginForm from "./component/Login";
 import SearchAdminPage from "./component/SearchAdminPage";
 import Navbar from "./component/Navbar";
-import { AuthProvider } from "./component/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./component/ProtectedRoute";
 import ResultPage from "./component/ResultPage";
+
+const user = "a";
 
 const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Navbar />
+        <Navbar/>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginForm />} />
+          <Route path="/login" element={<LoginForm />} />
           <Route
             path="/search"
-            element={
-              <ProtectedRoute>
-                <SearchPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/adminsearch"
             element={
               <ProtectedRoute>
                 <SearchAdminPage />
@@ -40,6 +33,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          
           
         </Routes>
       </AuthProvider>

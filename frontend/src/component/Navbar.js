@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Layout, Avatar, Button, Space, Dropdown, Menu } from "antd";
+import { Layout, Avatar, Button, Space, Dropdown, Menu, Image } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import {
   HomeOutlined,
@@ -9,13 +9,13 @@ import {
   SettingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { AuthContext } from "./AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 const { Header } = Layout;
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, logout } = useContext(AuthContext);
+  const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
     logout(navigate);
@@ -23,14 +23,27 @@ const Navbar = () => {
 
   const profileMenu = (
     <Menu>
-      <Menu.Item key="profile" icon={<UserOutlined />} onClick={() => navigate("/profile")}>
+      <Menu.Item
+        key="profile"
+        icon={<UserOutlined />}
+        onClick={() => navigate("/profile")}
+      >
         โปรไฟล์
       </Menu.Item>
-      <Menu.Item key="settings" icon={<SettingOutlined />} onClick={() => navigate("/settings")}>
+      <Menu.Item
+        key="settings"
+        icon={<SettingOutlined />}
+        onClick={() => navigate("/settings")}
+      >
         ตั้งค่า
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item key="logout" icon={<LogoutOutlined />} danger onClick={handleLogout}>
+      <Menu.Item
+        key="logout"
+        icon={<LogoutOutlined />}
+        danger
+        onClick={handleLogout}
+      >
         ออกจากระบบ
       </Menu.Item>
     </Menu>
@@ -46,31 +59,44 @@ const Navbar = () => {
         padding: "0 20px",
       }}
     >
-      {/* Logo */}
-      <div style={{ color: "white", fontSize: "18px", fontWeight: "bold" }}>
-        <Link to="/" style={{ color: "white", textDecoration: "none" }}>
-          MyApp
-        </Link>
-      </div>
+      <img
+        src="https://www.psu.ac.th/img/logos/psu_th.webp"
+        alt="Ant Design Logo"
+        style={{ height: '40px' }}
+      />
 
-      {/* Navigation Links */}
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-        <Link to="/" style={{ color: "white", display: "flex", alignItems: "center", textDecoration: "none" }}>
+        <Link
+          to="/"
+          style={{
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none",
+          }}
+        >
           <HomeOutlined style={{ marginRight: "5px" }} />
           Home
         </Link>
-        <Link to="/search" style={{ color: "white", display: "flex", alignItems: "center", textDecoration: "none" }}>
+        <Link
+          to="/search"
+          style={{
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none",
+          }}
+        >
           <SearchOutlined style={{ marginRight: "5px" }} />
           ดูข้อมูลเลือด
         </Link>
-        <Link to="/adminsearch" style={{ color: "white", display: "flex", alignItems: "center", textDecoration: "none" }}>
-          <SearchOutlined style={{ marginRight: "5px" }} />
-          ดูข้อมูลเลือด Admin
-        </Link>
 
-        {/* Conditional Rendering for Login/Logout */}
-        {isLoggedIn ? (
-          <Dropdown overlay={profileMenu} placement="bottomRight" trigger={['click']}>
+        {isAuthenticated ? (
+          <Dropdown
+            overlay={profileMenu}
+            placement="bottomRight"
+            trigger={["click"]}
+          >
             <Space>
               <Avatar style={{ backgroundColor: "#87d068" }} />
               <span style={{ color: "white" }}>ชื่อผู้ใช้</span>

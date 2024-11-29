@@ -4,59 +4,86 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
+// Antigen mapping
+const ANTIGEN_MAPPING = {
+  Lea: "Lea",
+  Leb: "Leb",
+  mia: "mia",
+  E: "E",
+  D: "D",
+  ee: "e",
+  C: "C",
+  cc: "c",
+  P1: "P1",
+  I: "I",
+  M: "M",
+  N: "N",
+  S: "S",
+  ss: "s",
+  Fya: "Fya",
+  Fyb: "Fyb",
+  Dia: "Dia",
+  Dib: "Dib",
+  Jka: "Jka",
+  Jkb: "Jkb",
+  K: "K",
+  kk: "k",
+  Xga: "Xga",
+};
+
 const ResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const data = location.state?.result || {};
 
-  // ฟอร์แมตข้อมูลกรุ๊ปเลือดย่อยให้เป็นสตริงเดียว
+  // Map antigens to their key and value ("+" or "-")
   const antigenInfo = Object.entries(data)
-    .filter(([_, value]) => value === "+" || value === "-") // กรองค่าที่เป็น + หรือ -
-    .map(([key, value]) => `${key}${value}`) // รวมชื่อของกรุ๊ปเลือดกับค่า + หรือ -
-    .join(", "); // รวมเป็นสตริงเดียวกัน
+    .filter(([key, value]) => ANTIGEN_MAPPING[key] && (value === "+" || value === "-"))
+    .map(([key, value]) => `${ANTIGEN_MAPPING[key]}${value}`)
+    .join(", ");
 
   return (
-    <Row justify="center" style={{ marginTop: "50px" }}>
+    <Row justify="center" style={{ marginTop: "50px"}}>
       <Col xs={24} sm={20} md={16} lg={12}>
         <Card
-          title={<Title level={4}>รายละเอียดผู้บริจาค</Title>}
+          title={<Title level={4} style={{ fontSize: 20 }}>รายละเอียดผู้บริจาค</Title>}
           bordered={true}
           style={{
             borderRadius: "10px",
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <Row gutter={[16, 16]}>
+          <Row gutter={[16, 16]} >
             <Col span={12}>
-              <Text strong>Public ID:</Text>
-              <p>{data.public_id || "N/A"}</p>
+              <Text strong style={{ fontSize: 20 }}>Public ID:</Text>
+              <p style={{ fontSize: 20 }}>{data.public_id || "N/A"}</p>
             </Col>
             <Col span={12}>
-              <Text strong>Donor ID:</Text>
-              <p>{data.donor_id || "N/A"}</p>
+              <Text strong style={{ fontSize: 20 }}>Donor ID:</Text>
+              <p style={{ fontSize: 20 }}>{data.donor_id || "N/A"}</p>
             </Col>
             <Col span={12}>
-              <Text strong>ชื่อ:</Text>
-              <p>{data.fname || "N/A"}</p>
+              <Text strong style={{ fontSize: 20 }}>ชื่อ:</Text>
+              <p style={{ fontSize: 20 }}>{data.fname || "N/A"}</p>
             </Col>
             <Col span={12}>
-              <Text strong>นามสกุล:</Text>
-              <p>{data.lname || "N/A"}</p>
+              <Text strong style={{ fontSize: 20 }}>นามสกุล:</Text>
+              <p style={{ fontSize: 20 }}>{data.lname || "N/A"}</p>
             </Col>
             <Col span={12}>
-              <Text strong>กรุ๊ปเลือด:</Text>
-              <p>{data.gr || "N/A"}</p>
+              <Text strong style={{ fontSize: 20 }}>กรุ๊ปเลือด:</Text>
+              <p style={{ fontSize: 20 }}>{data.gr || "N/A"}</p>
             </Col>
             <Col span={12}>
-              <Text strong>RH:</Text>
-              <p>{data.rh || "N/A"}</p>
+              <Text strong style={{ fontSize: 20 }}>RH:</Text>
+              <p style={{ fontSize: 20 }}>{data.rh || "N/A"}</p>
             </Col>
           </Row>
 
-          <Title level={5} style={{ marginTop: "20px" }}>
+          <Title level={5} style={{ marginTop: "20px",fontSize: 20 }}>
             กรุ๊ปเลือดย่อย
           </Title>
-          <Text>{antigenInfo || "ไม่มีข้อมูล"}</Text>
+          <Text style={{ fontSize: 20 }}>{antigenInfo || "ไม่มีข้อมูล"}</Text>
         </Card>
 
         <Button
