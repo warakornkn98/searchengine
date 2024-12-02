@@ -6,18 +6,23 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("userData.token");
-    if (token && isTokenValid(token)) {
-      setIsAuthenticated(true);
-    } else {
-      clearAuthData();
-      setIsAuthenticated(false);
-      navigate("/login");
-    }
-  }, [navigate]);
+    const initializeAuth = async () => {
+      const token = localStorage.getItem("userData.token");
+      if (token && isTokenValid(token)) {
+        setIsAuthenticated(true);
+      } else {
+        clearAuthData();
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    };
+
+    initializeAuth();
+  }, []);
 
   const login = (token) => {
     setIsAuthenticated(true);
@@ -31,7 +36,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

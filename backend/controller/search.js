@@ -81,3 +81,22 @@ exports.getAllBloodinfo = async (req, res) => {
     }
 };
 
+
+exports.addBloodInfo = (req, res) => {
+    const { public_id, donor_id, fname, lname, gr, rh } = req.body;
+
+    if (!public_id || !donor_id || !fname || !lname || !gr || !rh) {
+      return res.status(400).json({ error: "กรุณากรอกข้อมูลให้ครบถ้วน" });
+    }
+  
+    const sql = "INSERT INTO donor (public_id, donor_id, fname, lname, gr, rh) VALUES (?, ?, ?, ?, ?, ?)";
+    const values = [public_id, donor_id, fname, lname, gr, rh];
+  
+    conn.query(sql, values, (err, result) => {
+      if (err) {
+        console.error("Error inserting data:", err);
+        return res.status(500).json({ error: "เกิดข้อผิดพลาดในการบันทึกข้อมูล" });
+      }
+      res.status(201).json({ message: "เพิ่มข้อมูลสำเร็จ", data: { public_id, donor_id, fname, lname, gr, rh } });
+    });
+  };
