@@ -19,8 +19,24 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="/login" element={<LoginForm />} />
+          <Route path="public">
+            <Route
+              path="search"
+              element={
+                <SearchPage />
+              }
+            />
+            <Route
+              path="results"
+              element={
+                  <ResultPage />
+              }
+            />
+          </Route>
+          
+
           <Route
-            path="/search"
+            path="/admin/search"
             element={
               <ProtectedRoute>
                 <SearchAdminPage />
@@ -28,21 +44,14 @@ const App = () => {
             }
           />
           <Route
-            path="/search_"
-            element={
-              <ProtectedRoute>
-                <SearchPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/results"
+            path="/admin/results"
             element={
               <ProtectedRoute>
                 <ResultPage />
               </ProtectedRoute>
             }
           />
+          
           <Route
             path="/addbloodinfo"
             element={

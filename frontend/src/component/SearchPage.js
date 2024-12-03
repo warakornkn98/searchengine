@@ -23,7 +23,7 @@ const SearchPage = () => {
       console.log(data.length > 0);
 
       if (data) {
-        navigate("/results", { state: { result: data } });
+        navigate("/public/results", { state: { result: data } });
       } else {
         message.warning("ไม่พบข้อมูลที่ตรงกับการค้นหา");
       }
