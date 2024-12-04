@@ -11,7 +11,7 @@ const LoginForm = () => {
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to="/search" />;
+    return <Navigate to="/admin/search" />;
   }
 
   const onFinish = async (values) => {
@@ -20,7 +20,7 @@ const LoginForm = () => {
       const { data } = await api.post("/login", values);
       login(data.token);
       console.log(data.token);
-      navigate('/search')
+      navigate('/admin/search')
       message.success("Login successful!");
     } catch (error) {
       message.error("Invalid credentials!");

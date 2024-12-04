@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Input, Row, Col, message, Button, Typography, Card, Form } from "antd";
+import { Input, Row, Col, message, Button, Typography, Card, Form, Select } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
+const { Option } = Select;
 
 const AddBloodInfoPage = () => {
   const [loading, setLoading] = useState(false);
@@ -52,13 +53,17 @@ const AddBloodInfoPage = () => {
               onFinish={handleSubmit}
               style={{ fontSize: 20 }}
             >
-              {[
+              {[ 
                 { name: "public_id", label: "Public ID", placeholder: "กรอก Public ID" },
                 { name: "donor_id", label: "Donor ID", placeholder: "กรอก Donor ID" },
                 { name: "fname", label: "ชื่อ", placeholder: "กรอกชื่อ" },
                 { name: "lname", label: "นามสกุล", placeholder: "กรอกนามสกุล" },
-                { name: "gr", label: "กรุ๊ปเลือด", placeholder: "กรอกกรุ๊ปเลือด" },
-                { name: "rh", label: "RH", placeholder: "กรอก RH" },
+                {
+                  name: "gr", label: "กรุ๊ปเลือด", placeholder: "เลือกกรุ๊ปเลือด", type: "select", options: ["A", "B", "AB", "O"]
+                },
+                {
+                  name: "rh", label: "RH", placeholder: "เลือก RH", type: "select", options: ["Positive", "Negative"]
+                }
               ].map((field) => (
                 <Form.Item
                   key={field.name}
@@ -66,7 +71,17 @@ const AddBloodInfoPage = () => {
                   label={field.label}
                   rules={[{ required: true, message: `โปรดกรอก ${field.label}` }]}
                 >
-                  <Input placeholder={field.placeholder} style={{ fontSize: 18 }} />
+                  {field.type === "select" ? (
+                    <Select placeholder={field.placeholder} style={{ fontSize: 18 }}>
+                      {field.options.map((option) => (
+                        <Option key={option} value={option}>
+                          {option}
+                        </Option>
+                      ))}
+                    </Select>
+                  ) : (
+                    <Input placeholder={field.placeholder} style={{ fontSize: 18 }} />
+                  )}
                 </Form.Item>
               ))}
               <Form.Item>

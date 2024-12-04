@@ -2,16 +2,22 @@ import React, { useState } from "react";
 import { Layout, Input, Button, Form, Row, Col, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "./Navbar";
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 const SearchPage = () => {
   const [loading, setLoading] = useState(false);
+  const [captchaQuestion, setCaptchaQuestion] = useState(generateCaptcha());
+  const [captchaInput, setCaptchaInput] = useState("");
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    console.log(values);
+    if (parseInt(captchaInput) !== captchaQuestion.answer) {
+      message.error("CAPTCHA ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง");
+      setCaptchaQuestion(generateCaptcha()); // สร้าง CAPTCHA ใหม่
+      setCaptchaInput(""); // รีเซ็ตช่องกรอก CAPTCHA
+      return;
+    }
 
     setLoading(true);
     try {
@@ -20,7 +26,6 @@ const SearchPage = () => {
         values
       );
       const data = response.data;
-      console.log(data.length > 0);
 
       if (data) {
         navigate("/results", { state: { result: data } });
@@ -34,22 +39,29 @@ const SearchPage = () => {
     }
   };
 
+  // ฟังก์ชันสำหรับสร้าง CAPTCHA
+  function generateCaptcha() {
+    const num1 = Math.floor(Math.random() * 10);
+    const num2 = Math.floor(Math.random() * 10);
+    return {
+      question: `${num1} + ${num2}`,
+      answer: num1 + num2,
+    };
+  }
+
   return (
     <Layout>
-      <Header style={{ background: "#001529"}}>
+      <Content style={{ padding: "50px", background: "#f0f2f5" }}>
         <h1
           style={{
-            color: "#fff",
+            color: "#001529",
             textAlign: "center",
-            margin: 0,
+            margin: "20px",
             fontSize: "24px",
           }}
         >
           ระบบค้นหาข้อมูลผู้บริจาคโลหิต
         </h1>
-      </Header>
-
-      <Content style={{ padding: "50px", background: "#f0f2f5" }}>
         <Row justify="center">
           <Col xs={24} sm={20} md={16} lg={12} xl={10}>
             <Form
@@ -79,6 +91,15 @@ const SearchPage = () => {
                 />
               </Form.Item>
 
+              <Form.Item label={`CAPTCHA: ${captchaQuestion.question}`}>
+                <Input
+                  placeholder="กรุณากรอกผลลัพธ์"
+                  value={captchaInput}
+                  onChange={(e) => setCaptchaInput(e.target.value)}
+                  style={{ height: "50px", fontSize: "16px" }}
+                />
+              </Form.Item>
+
               <Form.Item>
                 <Button
                   type="primary"
@@ -88,6 +109,7 @@ const SearchPage = () => {
                     fontSize: "16px",
                     width: "100%",
                   }}
+                  loading={loading}
                 >
                   ค้นหา
                 </Button>
