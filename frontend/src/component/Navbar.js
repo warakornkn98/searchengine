@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Layout, Avatar, Button, Space, Dropdown, Menu, Drawer, Grid } from "antd";
+import {
+  Layout,
+  Avatar,
+  Button,
+  Space,
+  Dropdown,
+  Menu,
+  Drawer,
+  Grid,
+} from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import {
   HomeOutlined,
@@ -30,10 +39,16 @@ const Navbar = () => {
       <Menu.Item icon={<UserOutlined />} onClick={() => navigate("/profile")}>
         โปรไฟล์
       </Menu.Item>
-      <Menu.Item icon={<SearchOutlined />} onClick={() => navigate("/admin/search")}>
+      <Menu.Item
+        icon={<SearchOutlined />}
+        onClick={() => navigate("/admin/search")}
+      >
         ค้นหาข้อมูลเลือด
       </Menu.Item>
-      <Menu.Item icon={<SettingOutlined />} onClick={() => navigate("/settings")}>
+      <Menu.Item
+        icon={<SettingOutlined />}
+        onClick={() => navigate("/settings")}
+      >
         ตั้งค่า
       </Menu.Item>
       <Menu.Divider />
@@ -46,10 +61,20 @@ const Navbar = () => {
   // เมนูลิงก์ทั่วไป
   const renderLinks = (isDrawer = false) => (
     <>
-      <MenuLink to="/" icon={<HomeOutlined />} label="Home" isDrawer={isDrawer} />
-      <MenuLink to="/search" icon={<SearchOutlined />} label="ดูข้อมูลเลือด" isDrawer={isDrawer} />
+      <MenuLink
+        to="/"
+        icon={<HomeOutlined />}
+        label="Home"
+        isDrawer={isDrawer}
+      />
       {isAuthenticated ? (
         <>
+          <MenuLink
+            to="/admin/search"
+            icon={<SearchOutlined />}
+            label="ดูข้อมูลเลือด"
+            isDrawer={isDrawer}
+          />
           <MenuLink
             to="/admin/addbloodinfo"
             icon={<PlusOutlined />}
@@ -58,7 +83,12 @@ const Navbar = () => {
           />
           {isDrawer ? (
             <>
-              <MenuLink to="/profile" icon={<UserOutlined />} label="โปรไฟล์" isDrawer={isDrawer} />
+              <MenuLink
+                to="/profile"
+                icon={<UserOutlined />}
+                label="โปรไฟล์"
+                isDrawer={isDrawer}
+              />
               <Button
                 type="text"
                 danger
@@ -79,7 +109,20 @@ const Navbar = () => {
           )}
         </>
       ) : (
-        <MenuLink to="/Login" icon={<LoginOutlined />} label="Admin" isDrawer={isDrawer} />
+        <>
+          <MenuLink
+            to="/search"
+            icon={<SearchOutlined />}
+            label="ดูข้อมูลเลือด"
+            isDrawer={isDrawer}
+          />
+          <MenuLink
+            to="/Login"
+            icon={<LoginOutlined />}
+            label="Admin"
+            isDrawer={isDrawer}
+          />
+        </>
       )}
     </>
   );
@@ -116,7 +159,9 @@ const Navbar = () => {
             onClose={() => setDrawerVisible(false)}
             visible={drawerVisible}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "15px" }}
+            >
               {renderLinks(true)}
             </div>
           </Drawer>

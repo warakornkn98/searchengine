@@ -11,7 +11,6 @@ app.use(bodyParse.json({limit:'10mb'}))
 
 const { readdirSync } = require('fs')
 
-//Route
 readdirSync('./routes').map((r)=>app.use('/api',require('./routes/'+r)))
 
 app.listen(5000,()=>{
