@@ -9,6 +9,16 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const [userData, setUserData] = useState({
+    id: 1,
+    username: "admin",
+    fname: "admin",
+    lname: "admin",
+    agency: "หน่วยงานตัวอย่าง",
+    department: "แผนกตัวอย่าง",
+    position: "ตำแหน่งตัวอย่าง",
+  });
+
   useEffect(() => {
     const initializeAuth = async () => {
       const token = localStorage.getItem("userData.token");
@@ -36,7 +46,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout, userData }}>
       {children}
     </AuthContext.Provider>
   );

@@ -9,6 +9,7 @@ import ProtectedRoute from "./component/ProtectedRoute";
 import ResultPage from "./page/ResultPage";
 import AddBloodInfoPage from "./page/AddBloodInfoPage";
 import HomePage from "./page/HomePage";
+import ProfilePage from "./page/ProfilePage";
 
 const user = "a";
 
@@ -25,6 +26,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <SearchAdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />

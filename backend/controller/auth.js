@@ -53,3 +53,21 @@ exports.login = async (req, res) => {
     });
   });
 };
+
+
+exports.getUserProfile = (req, res) => {
+  const { username } = req.params;
+
+  const query = "SELECT id, username, fname, lname, agency, department, position FROM users WHERE username = ?";
+
+  db.query(query, [username], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json(results[0]); // ส่งกลับข้อมูลผู้ใช้ที่ค้นหา
+  });
+};

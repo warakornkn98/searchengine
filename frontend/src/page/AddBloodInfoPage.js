@@ -1,5 +1,17 @@
 import React, { useState } from "react";
-import { Input, Row, Col, message, Button, Typography, Card, Form, Select, Tag } from "antd";
+import {
+  Input,
+  Row,
+  Col,
+  message,
+  Button,
+  Typography,
+  Card,
+  Form,
+  Select,
+  Tag,
+  Modal,
+} from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -15,22 +27,268 @@ const AddBloodInfoPage = () => {
   const navigate = useNavigate();
 
   const minorBloodGroupsList = [
-    "Lea", "Leb", "mia", "E", "D", "ee", "C", "cc", "P1", "I", "M", "N", "S", "ss", 
-    "Fya", "Fyb", "Dia", "Dib", "Jka", "Jkb", "K", "kk", "Xga"
+    "Lea",
+    "Leb",
+    "mia",
+    "E",
+    "D",
+    "ee",
+    "C",
+    "cc",
+    "P1",
+    "I",
+    "M",
+    "N",
+    "S",
+    "ss",
+    "Fya",
+    "Fyb",
+    "Dia",
+    "Dib",
+    "Jka",
+    "Jkb",
+    "K",
+    "kk",
+    "Xga",
   ];
 
   const handleSubmit = async (values) => {
     setLoading(true);
+    const requestData = { ...values, minorBloodGroups: selectedMinorBloodGroups }; // Changed to minorBloodGroups
+
     try {
-      const data = { ...values, minorBloodGroups: selectedMinorBloodGroups };
-      await axios.post("http://localhost:5000/api/addbloodinfo", data);
+      // Send the request to add blood information
+      const response = await axios.post(
+        "http://localhost:5000/api/addbloodinfo",
+        requestData
+      );
+
+      // On success
       message.success("เพิ่มข้อมูลสำเร็จ");
       form.resetFields();
       setSelectedMinorBloodGroups([]);
       navigate("/search");
     } catch (error) {
-      console.error(error);
-      message.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล");
+      if (error.response && error.response.status === 409) {
+        // Handle duplicate data (HTTP 409 Conflict)
+        const existingData = error.response.data.existingData; // Existing data
+        const newData = { ...values, minorBloodGroups: selectedMinorBloodGroups }; // New data
+
+        Modal.confirm({
+          title: "พบข้อมูลซ้ำ",
+          content: (
+            <div>
+              <p>
+                <strong>ข้อมูลที่มีอยู่ในระบบ:</strong>
+              </p>
+              {existingData && typeof existingData === "object" ? (
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        style={{
+                          textAlign: "left",
+                          borderBottom: "1px solid #ddd",
+                          padding: "8px",
+                        }}
+                      >
+                        ฟิลด์
+                      </th>
+                      <th
+                        style={{
+                          textAlign: "left",
+                          borderBottom: "1px solid #ddd",
+                          padding: "8px",
+                        }}
+                      >
+                        ค่า
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(existingData).map(([key, value]) => {
+                      if (key === "minorBloodGroups") {
+                        const filteredGroups = value
+                          .filter((group) => group.status !== null)
+                          .map(
+                            (group) => `${group.name} ${group.status}`
+                          )
+                          .join(", ");
+
+                        return (
+                          <tr key={key}>
+                            <td
+                              style={{
+                                borderBottom: "1px solid #ddd",
+                                padding: "8px",
+                              }}
+                            >
+                              {key}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: "1px solid #ddd",
+                                padding: "8px",
+                              }}
+                            >
+                              {filteredGroups}
+                            </td>
+                          </tr>
+                        );
+                      }
+                      return (
+                        <tr key={key}>
+                          <td
+                            style={{
+                              borderBottom: "1px solid #ddd",
+                              padding: "8px",
+                            }}
+                          >
+                            {key}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: "1px solid #ddd",
+                              padding: "8px",
+                            }}
+                          >
+                            {JSON.stringify(value)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              ) : (
+                <p style={{ color: "red" }}>ไม่มีข้อมูลที่มีอยู่ในระบบ</p>
+              )}
+
+              <p>
+                <strong>ข้อมูลที่คุณพยายามเพิ่ม:</strong>
+              </p>
+              {newData && typeof newData === "object" ? (
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        style={{
+                          textAlign: "left",
+                          borderBottom: "1px solid #ddd",
+                          padding: "8px",
+                        }}
+                      >
+                        ฟิลด์
+                      </th>
+                      <th
+                        style={{
+                          textAlign: "left",
+                          borderBottom: "1px solid #ddd",
+                          padding: "8px",
+                        }}
+                      >
+                        ค่า
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(newData).map(([key, value]) => {
+                      if (key === "minorBloodGroups") {
+                        const filteredGroups = value
+                          .filter((group) => group.status !== null)
+                          .map(
+                            (group) => `${group.name} ${group.status}`
+                          )
+                          .join(", ");
+
+                        return (
+                          <tr key={key}>
+                            <td
+                              style={{
+                                borderBottom: "1px solid #ddd",
+                                padding: "8px",
+                              }}
+                            >
+                              {key}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: "1px solid #ddd",
+                                padding: "8px",
+                              }}
+                            >
+                              {filteredGroups}
+                            </td>
+                          </tr>
+                        );
+                      }
+
+                      return (
+                        <tr key={key}>
+                          <td
+                            style={{
+                              borderBottom: "1px solid #ddd",
+                              padding: "8px",
+                            }}
+                          >
+                            {key}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: "1px solid #ddd",
+                              padding: "8px",
+                            }}
+                          >
+                            {JSON.stringify(value)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              ) : (
+                <p style={{ color: "red" }}>ไม่มีข้อมูลใหม่</p>
+              )}
+
+              <p>คุณต้องการอัปเดตข้อมูลเก่าหรือไม่?</p>
+            </div>
+          ),
+          okText: "อัปเดตข้อมูล",
+          cancelText: "ยกเลิก",
+          onOk: async () => {
+            try {
+              await axios.put(
+                "http://localhost:5000/api/updatebloodinfo",
+                requestData
+              );
+              message.success("อัปเดตข้อมูลสำเร็จ");
+              form.resetFields();
+              setSelectedMinorBloodGroups([]);
+              navigate("/search");
+            } catch (updateError) {
+              console.error(updateError);
+              message.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูล");
+            }
+          },
+          onCancel: () => {
+            message.info("ยกเลิกการอัปเดตข้อมูล");
+          },
+        });
+      } else {
+        console.error(error);
+        message.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล");
+      }
     } finally {
       setLoading(false);
     }
@@ -42,35 +300,31 @@ const AddBloodInfoPage = () => {
       return;
     }
 
-    
     const existingGroupIndex = selectedMinorBloodGroups.findIndex(
       (group) => group.name === selectedMinorBloodGroup
     );
 
     if (existingGroupIndex !== -1) {
-      
       const updatedGroups = [...selectedMinorBloodGroups];
       updatedGroups[existingGroupIndex] = {
         ...updatedGroups[existingGroupIndex],
-        status: selectedStatus
+        status: selectedStatus,
       };
       setSelectedMinorBloodGroups(updatedGroups);
     } else {
-      
       setSelectedMinorBloodGroups([
         ...selectedMinorBloodGroups,
-        { name: selectedMinorBloodGroup, status: selectedStatus }
+        { name: selectedMinorBloodGroup, status: selectedStatus },
       ]);
     }
 
-   
     setSelectedMinorBloodGroup(null);
     setSelectedStatus(null);
   };
 
   const handleRemoveMinorBloodGroup = (group) => {
     setSelectedMinorBloodGroups(
-      selectedMinorBloodGroups.filter(item => item.name !== group.name)
+      selectedMinorBloodGroups.filter((item) => item.name !== group.name)
     );
   };
 
@@ -101,48 +355,70 @@ const AddBloodInfoPage = () => {
               onFinish={handleSubmit}
               style={{ fontSize: 20 }}
             >
-              
-              {[ 
-                { name: "public_id", label: "Public ID", placeholder: "กรอก Public ID" },
-                { name: "donor_id", label: "Donor ID", placeholder: "กรอก Donor ID" }
+              {[
+                {
+                  name: "public_id",
+                  label: "Public ID",
+                  placeholder: "กรอก Public ID",
+                },
+                {
+                  name: "donor_id",
+                  label: "Donor ID",
+                  placeholder: "กรอก Donor ID",
+                },
               ].map((field) => (
                 <Form.Item
                   key={field.name}
                   name={field.name}
                   label={field.label}
-                  rules={[{ required: true, message: `โปรดกรอก ${field.label}` }]}>
-                  <Input placeholder={field.placeholder} style={{ fontSize: 18 }} />
+                  rules={[
+                    { required: true, message: `โปรดกรอก ${field.label}` },
+                  ]}
+                >
+                  <Input
+                    placeholder={field.placeholder}
+                    style={{ fontSize: 18 }}
+                  />
                 </Form.Item>
               ))}
 
-              
               <Form.Item label="ชื่อและนามสกุล" style={{ marginBottom: 0 }}>
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
                       name="fname"
-                      rules={[{ required: true, message: "กรุณากรอกชื่อ" }]} >
+                      rules={[{ required: true, message: "กรุณากรอกชื่อ" }]}
+                    >
                       <Input placeholder="กรอกชื่อ" style={{ fontSize: 18 }} />
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item
                       name="lname"
-                      rules={[{ required: true, message: "กรุณากรอกนามสกุล" }]} >
-                      <Input placeholder="กรอกนามสกุล" style={{ fontSize: 18 }} />
+                      rules={[{ required: true, message: "กรุณากรอกนามสกุล" }]}
+                    >
+                      <Input
+                        placeholder="กรอกนามสกุล"
+                        style={{ fontSize: 18 }}
+                      />
                     </Form.Item>
                   </Col>
                 </Row>
               </Form.Item>
 
-              
               <Form.Item label="กรุ๊ปเลือดและ RH" style={{ marginBottom: 0 }}>
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
                       name="gr"
-                      rules={[{ required: true, message: "กรุณาเลือกกรุ๊ปเลือด" }]}>
-                      <Select placeholder="เลือกกรุ๊ปเลือด" style={{ fontSize: 18 }}>
+                      rules={[
+                        { required: true, message: "กรุณาเลือกกรุ๊ปเลือด" },
+                      ]}
+                    >
+                      <Select
+                        placeholder="เลือกกรุ๊ปเลือด"
+                        style={{ fontSize: 18 }}
+                      >
                         {["A", "B", "AB", "O"].map((option) => (
                           <Option key={option} value={option}>
                             {option}
@@ -154,7 +430,8 @@ const AddBloodInfoPage = () => {
                   <Col span={12}>
                     <Form.Item
                       name="rh"
-                      rules={[{ required: true, message: "กรุณาเลือก RH" }]}>
+                      rules={[{ required: true, message: "กรุณาเลือก RH" }]}
+                    >
                       <Select placeholder="เลือก RH" style={{ fontSize: 18 }}>
                         {["+", "-"].map((option) => (
                           <Option key={option} value={option}>
@@ -167,8 +444,10 @@ const AddBloodInfoPage = () => {
                 </Row>
               </Form.Item>
 
-              
-              <Form.Item label="หมู่เลือดย่อยและสถานะ" style={{ marginBottom: 0 }}>
+              <Form.Item
+                label="หมู่เลือดย่อยและสถานะ"
+                style={{ marginBottom: 0 }}
+              >
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item>
@@ -176,7 +455,8 @@ const AddBloodInfoPage = () => {
                         value={selectedMinorBloodGroup}
                         placeholder="เลือกหมู่เลือดย่อย"
                         style={{ width: "100%", fontSize: 18 }}
-                        onChange={(value) => setSelectedMinorBloodGroup(value)}>
+                        onChange={(value) => setSelectedMinorBloodGroup(value)}
+                      >
                         {minorBloodGroupsList.map((group) => (
                           <Option key={group} value={group}>
                             {group}
@@ -191,7 +471,8 @@ const AddBloodInfoPage = () => {
                         value={selectedStatus}
                         placeholder="เลือกสถานะ"
                         style={{ width: "100%", fontSize: 18 }}
-                        onChange={(value) => setSelectedStatus(value)}>
+                        onChange={(value) => setSelectedStatus(value)}
+                      >
                         <Option value="+">+</Option>
                         <Option value="-">-</Option>
                       </Select>
@@ -200,24 +481,24 @@ const AddBloodInfoPage = () => {
                 </Row>
               </Form.Item>
 
-             
               <Form.Item>
                 <Button
                   type="primary"
                   onClick={handleAddMinorBloodGroup}
-                  style={{ fontSize: 18 }}>
+                  style={{ fontSize: 18 }}
+                >
                   เพิ่มหมู่เลือดย่อย
                 </Button>
               </Form.Item>
 
-              
               <Form.Item label="หมู่เลือดย่อยที่เลือก">
                 {selectedMinorBloodGroups.map((group, index) => (
                   <Tag
                     key={index}
                     closable
                     onClose={() => handleRemoveMinorBloodGroup(group)}
-                    style={{ marginBottom: 5 }}>
+                    style={{ marginBottom: 5 }}
+                  >
                     {group.name} {group.status === "+" ? "(+)" : "(-)"}
                   </Tag>
                 ))}
@@ -230,7 +511,8 @@ const AddBloodInfoPage = () => {
                       type="primary"
                       htmlType="submit"
                       loading={loading}
-                      style={{ fontSize: 18 }}>
+                      style={{ fontSize: 18 }}
+                    >
                       บันทึก
                     </Button>
                   </Col>
@@ -240,7 +522,8 @@ const AddBloodInfoPage = () => {
                         form.resetFields();
                         setSelectedMinorBloodGroups([]);
                       }}
-                      style={{ fontSize: 18 }}>
+                      style={{ fontSize: 18 }}
+                    >
                       ล้างข้อมูล
                     </Button>
                   </Col>

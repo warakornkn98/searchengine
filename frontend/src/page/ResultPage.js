@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
-const ANTIGEN_MAPPING = {
+const MINORBLOODGROUP_MAPPING = {
   Lea: "Lea",
   Leb: "Leb",
   mia: "mia",
@@ -35,9 +35,9 @@ const ResultPage = () => {
   const navigate = useNavigate();
   const data = location.state?.result || {};
 
-  const antigenInfo = Object.entries(data)
-    .filter(([key, value]) => ANTIGEN_MAPPING[key] && (value === "+" || value === "-"))
-    .map(([key, value]) => `${ANTIGEN_MAPPING[key]}${value}`)
+  const minorBloodGroupInfo = (data.minorBloodGroups || [])
+    .filter(group => group.status) // Filter to only show groups with a valid status (+ or -)
+    .map(group => `${group.name}${group.status}`)
     .join(", ");
 
   return (
@@ -45,18 +45,18 @@ const ResultPage = () => {
       <Col xs={24} sm={20} md={16} lg={12}>
         {/* Card 1: ข้อมูลผู้บริจาค */}
         <Card
-            style={{
-              marginBottom: "20px",
-              border: "1px solid #d9d9d9",
-              borderRadius: "10px",
-            }}
-            headStyle={{
-              backgroundColor: "#e6f7ff",
-              fontWeight: "bold",
-              fontSize: "16px",
-            }}
-            title="ข้อมูลผู้บริจาค"
-          >
+          style={{
+            marginBottom: "20px",
+            border: "1px solid #d9d9d9",
+            borderRadius: "10px",
+          }}
+          headStyle={{
+            backgroundColor: "#e6f7ff",
+            fontWeight: "bold",
+            fontSize: "16px",
+          }}
+          title="ข้อมูลผู้บริจาค"
+        >
           <Row gutter={[16, 16]} align="middle">
             <Col xs={24} sm={12}>
               <Text strong style={{ fontSize: "16px" }}>ชื่อ:</Text>{" "}
@@ -75,18 +75,18 @@ const ResultPage = () => {
 
         {/* Card 2: รายละเอียดผู้บริจาค */}
         <Card
-            style={{
-              marginBottom: "20px",
-              border: "1px solid #d9d9d9",
-              borderRadius: "10px",
-            }}
-            headStyle={{
-              backgroundColor: "#e6f7ff",
-              fontWeight: "bold",
-              fontSize: "16px",
-            }}
-            title="รายละเอียดผู้บริจาค"
-          >
+          style={{
+            marginBottom: "20px",
+            border: "1px solid #d9d9d9",
+            borderRadius: "10px",
+          }}
+          headStyle={{
+            backgroundColor: "#e6f7ff",
+            fontWeight: "bold",
+            fontSize: "16px",
+          }}
+          title="รายละเอียดผู้บริจาค"
+        >
           <Row gutter={[16, 16]} align="middle">
             <Col xs={24} sm={12}>
               <Text strong style={{ fontSize: "16px" }}>Donor ID:</Text>{" "}
@@ -104,7 +104,7 @@ const ResultPage = () => {
           <Title level={5} style={{ marginTop: "20px", fontSize: "16px" }}>
             กรุ๊ปเลือดย่อย
           </Title>
-          <Text style={{ fontSize: "16px" }}>{antigenInfo || "ไม่มีข้อมูล"}</Text>
+          <Text style={{ fontSize: "16px" }}>{minorBloodGroupInfo || "ไม่มีข้อมูล"}</Text>
         </Card>
 
         <Button
