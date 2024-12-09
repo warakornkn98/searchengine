@@ -4,7 +4,7 @@ import { Card, Form, Input, Button, message } from "antd";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 
-const LoginForm = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -71,4 +71,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default LoginPage;

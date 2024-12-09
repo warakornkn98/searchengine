@@ -9,9 +9,38 @@ const ResultPage = () => {
   const navigate = useNavigate();
   const data = location.state?.result || {};
 
+  const MINORBLOODGROUP_MAPPING = {
+    Lea: "Lea",
+    Leb: "Leb",
+    mia: "mia",
+    E: "E",
+    D: "D",
+    ee: "e",
+    C: "C",
+    cc: "c",
+    P1: "P1",
+    I: "I",
+    M: "M",
+    N: "N",
+    S: "S",
+    ss: "s",
+    Fya: "Fya",
+    Fyb: "Fyb",
+    Dia: "Dia",
+    Dib: "Dib",
+    Jka: "Jka",
+    Jkb: "Jkb",
+    K: "K",
+    kk: "k",
+    Xga: "Xga",
+  };
+  
   const minorBloodGroupInfo = (data.minorBloodGroups || [])
     .filter(group => group.status)
-    .map(group => `${group.name}${group.status}`)
+    .map(group => {
+      const mappedName = MINORBLOODGROUP_MAPPING[group.name] || group.name;
+      return `${mappedName}${group.status}`;
+    })
     .join(", ");
 
   return (

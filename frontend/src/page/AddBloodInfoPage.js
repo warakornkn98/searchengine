@@ -65,7 +65,7 @@ const AddBloodInfoPage = () => {
       message.success("เพิ่มข้อมูลสำเร็จ");
       form.resetFields();
       setSelectedMinorBloodGroups([]);
-      navigate("/search");
+      navigate("/admin/addbloodinfo");
     } catch (error) {
       if (error.response && error.response.status === 409) {
         const existingData = error.response.data.existingData;

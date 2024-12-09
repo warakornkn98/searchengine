@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import LoginForm from "./component/Login";
+import LoginPage from "./page/LoginPage";
 import SearchAdminPage from "./page/SearchAdminPage";
 import SearchPage from "./page/SearchPage";
 import Navbar from "./component/Navbar";
@@ -20,7 +20,7 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginForm />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/admin/search"
             element={
