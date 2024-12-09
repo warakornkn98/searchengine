@@ -14,8 +14,8 @@ const SearchPage = () => {
   const onFinish = async (values) => {
     if (parseInt(captchaInput) !== captchaQuestion.answer) {
       message.error("CAPTCHA ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง");
-      setCaptchaQuestion(generateCaptcha()); // สร้าง CAPTCHA ใหม่
-      setCaptchaInput(""); // รีเซ็ตช่องกรอก CAPTCHA
+      setCaptchaQuestion(generateCaptcha());
+      setCaptchaInput("");
       return;
     }
 
@@ -39,7 +39,6 @@ const SearchPage = () => {
     }
   };
 
-  // ฟังก์ชันสำหรับสร้าง CAPTCHA
   function generateCaptcha() {
     const num1 = Math.floor(Math.random() * 10);
     const num2 = Math.floor(Math.random() * 10);

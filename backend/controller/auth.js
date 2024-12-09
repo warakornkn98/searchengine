@@ -68,6 +68,6 @@ exports.getUserProfile = (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    return res.status(200).json(results[0]); // ส่งกลับข้อมูลผู้ใช้ที่ค้นหา
+    return res.status(200).json(results[0]);
   });
 };

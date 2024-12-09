@@ -1,10 +1,10 @@
-import { jwtDecode } from "jwt-decode"; // ใช้ named import ที่ถูกต้อง
+import { jwtDecode } from "jwt-decode";
 import dayjs from "dayjs";
 
 export const isTokenValid = (token) => {
   try {
-    const { exp } = jwtDecode(token); // decode token เพื่อดูค่า exp
-    return dayjs().isBefore(dayjs.unix(exp)); // ตรวจสอบ token หมดอายุหรือไม่
+    const { exp } = jwtDecode(token);
+    return dayjs().isBefore(dayjs.unix(exp));
   } catch (error) {
     return false;
   }

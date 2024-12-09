@@ -4,46 +4,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
-const MINORBLOODGROUP_MAPPING = {
-  Lea: "Lea",
-  Leb: "Leb",
-  mia: "mia",
-  E: "E",
-  D: "D",
-  ee: "e",
-  C: "C",
-  cc: "c",
-  P1: "P1",
-  I: "I",
-  M: "M",
-  N: "N",
-  S: "S",
-  ss: "s",
-  Fya: "Fya",
-  Fyb: "Fyb",
-  Dia: "Dia",
-  Dib: "Dib",
-  Jka: "Jka",
-  Jkb: "Jkb",
-  K: "K",
-  kk: "k",
-  Xga: "Xga",
-};
-
 const ResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const data = location.state?.result || {};
 
   const minorBloodGroupInfo = (data.minorBloodGroups || [])
-    .filter(group => group.status) // Filter to only show groups with a valid status (+ or -)
+    .filter(group => group.status)
     .map(group => `${group.name}${group.status}`)
     .join(", ");
 
   return (
     <Row justify="center" style={{ marginTop: "50px", padding: "0 20px" }}>
       <Col xs={24} sm={20} md={16} lg={12}>
-        {/* Card 1: ข้อมูลผู้บริจาค */}
         <Card
           style={{
             marginBottom: "20px",
@@ -73,7 +46,6 @@ const ResultPage = () => {
           </Row>
         </Card>
 
-        {/* Card 2: รายละเอียดผู้บริจาค */}
         <Card
           style={{
             marginBottom: "20px",

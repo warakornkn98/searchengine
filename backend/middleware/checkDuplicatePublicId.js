@@ -43,7 +43,6 @@ exports.checkDuplicatePublicId = (req, res, next) => {
     WHERE public_id = ?
   `;
 
-  // เช็คว่า public_id ซ้ำหรือไม่
   conn.query(sql, [public_id], (err, results) => {
     if (err) {
       console.error("Error checking public_id duplication:", err);
@@ -53,7 +52,6 @@ exports.checkDuplicatePublicId = (req, res, next) => {
     }
 
     if (results[0].count > 0) {
-      // หากพบข้อมูลซ้ำ, ดึงข้อมูลจาก donor
       conn.query(sqlRespond, [public_id], (err, response) => {
         if (err) {
           console.error("Error fetching duplicate data:", err);
@@ -62,7 +60,6 @@ exports.checkDuplicatePublicId = (req, res, next) => {
             .json({ error: "เกิดข้อผิดพลาดในการดึงข้อมูล" });
         }
 
-        // สร้าง array ของ minorBloodGroup โดยใช้ข้อมูลจาก response
         const minorBloodGroupColumns = [
           'Lea', 'Leb', 'mia', 'E', 'D', 'ee', 'C', 'cc', 'P1', 'I', 'M', 'N', 
           'S', 'ss', 'Fya', 'Fyb', 'Dia', 'Dib', 'Jka', 'Jkb', 'K', 'kk', 'Xga'
@@ -71,11 +68,10 @@ exports.checkDuplicatePublicId = (req, res, next) => {
         const minorBloodGroups = minorBloodGroupColumns.map(col => {
           return {
             name: col,
-            status: response[0][col] || null  // ถ้าไม่มีข้อมูลจะได้ค่า null
+            status: response[0][col] || null
           };
         });
 
-        // ส่งข้อมูลที่ดึงมาในรูปแบบที่กำหนด
         return res.status(409).json({
           error: "public_id นี้มีอยู่ในระบบแล้ว",
           existingData: {
@@ -90,7 +86,6 @@ exports.checkDuplicatePublicId = (req, res, next) => {
         });
       });
     } else {
-      // หากไม่พบข้อมูลซ้ำ ให้ไปยังขั้นตอนถัดไป
       next();
     }
   });

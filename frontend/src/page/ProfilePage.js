@@ -65,7 +65,7 @@ const ProfilePage = () => {
 
         <Button
           type="primary"
-          onClick={() => window.location.reload()} // Reload to simulate a "Log out" or refresh action
+          onClick={() => window.location.reload()}
           style={{
             marginTop: "20px",
             borderRadius: "5px",

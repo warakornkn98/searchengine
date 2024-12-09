@@ -1,6 +1,5 @@
 const conn = require("../config/db");
 
-// ฟังก์ชันเพื่อดึงข้อมูลจากตาราง donor และ minorBloodGroup
 const getDonorWithBloodGroup = (public_id) => {
   const sql = `
     SELECT 
@@ -45,7 +44,6 @@ const getDonorWithBloodGroup = (public_id) => {
   });
 };
 
-// ฟังก์ชันเพื่อแปลงข้อมูล minorBloodGroup จากข้อมูลในตาราง donor
 const getMinorBloodGroup = (donorData) => {
   const minorBloodGroupColumns = [
     'Lea', 'Leb', 'mia', 'E', 'D', 'ee', 'C', 'cc', 'P1', 'I', 'M', 'N', 
@@ -150,7 +148,6 @@ exports.getAllBloodinfo = async (req, res) => {
 exports.addBloodInfo = (req, res) => {
   const { public_id, donor_id, fname, lname, gr, rh, minorBloodGroups } = req.body;
 
-  // ตรวจสอบข้อมูลว่าครบถ้วนหรือไม่
   if (!public_id || !donor_id || !fname || !lname || !gr || !rh || !minorBloodGroups) {
     return res.status(400).json({ error: "กรุณากรอกข้อมูลให้ครบถ้วน" });
   }
@@ -158,7 +155,6 @@ exports.addBloodInfo = (req, res) => {
   const donorSql = "INSERT INTO donor (public_id, donor_id, fname, lname, gr, rh) VALUES (?, ?, ?, ?, ?, ?)";
   const donorValues = [public_id, donor_id, fname, lname, gr, rh];
 
-  // แปลงข้อมูล minorBloodGroup เป็นโครงสร้างที่ตรงกับคอลัมน์ในตาราง
   const minorBloodGroupColumns = [
     "Lea", "Leb", "mia", "E", "D", "ee", "C", "cc", "P1", "I", "M", "N", "S",
     "ss", "Fya", "Fyb", "Dia", "Dib", "Jka", "Jkb", "K", "kk", "Xga",
@@ -166,18 +162,16 @@ exports.addBloodInfo = (req, res) => {
 
   const minorBloodGroupData = minorBloodGroupColumns.reduce((acc, column) => {
     const group = minorBloodGroups.find((item) => item.name === column);
-    acc[column] = group ? group.status : null; // หากไม่มีข้อมูล ให้ใส่ค่า `null`
+    acc[column] = group ? group.status : null;
     return acc;
   }, {});
 
-  // เริ่มการบันทึกข้อมูล
   conn.query(donorSql, donorValues, (donorErr, donorResult) => {
     if (donorErr) {
       console.error("Error inserting into donor:", donorErr);
       return res.status(500).json({ error: "เกิดข้อผิดพลาดในการบันทึกข้อมูลผู้บริจาค" });
     }
 
-    // ไม่จำเป็นต้องมีตารางแยกสำหรับ minorBloodGroup เนื่องจากข้อมูลเก็บอยู่ในตาราง donor แล้ว
     res.status(201).json({
       message: "เพิ่มข้อมูลสำเร็จ",
       data: {

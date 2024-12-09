@@ -54,25 +54,22 @@ const AddBloodInfoPage = () => {
 
   const handleSubmit = async (values) => {
     setLoading(true);
-    const requestData = { ...values, minorBloodGroups: selectedMinorBloodGroups }; // Changed to minorBloodGroups
+    const requestData = { ...values, minorBloodGroups: selectedMinorBloodGroups };
 
     try {
-      // Send the request to add blood information
       const response = await axios.post(
         "http://localhost:5000/api/addbloodinfo",
         requestData
       );
 
-      // On success
       message.success("เพิ่มข้อมูลสำเร็จ");
       form.resetFields();
       setSelectedMinorBloodGroups([]);
       navigate("/search");
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        // Handle duplicate data (HTTP 409 Conflict)
-        const existingData = error.response.data.existingData; // Existing data
-        const newData = { ...values, minorBloodGroups: selectedMinorBloodGroups }; // New data
+        const existingData = error.response.data.existingData;
+        const newData = { ...values, minorBloodGroups: selectedMinorBloodGroups };
 
         Modal.confirm({
           title: "พบข้อมูลซ้ำ",
