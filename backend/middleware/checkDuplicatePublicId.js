@@ -9,36 +9,7 @@ exports.checkDuplicatePublicId = (req, res, next) => {
 
   const sql = "SELECT COUNT(*) AS count FROM donor WHERE public_id = ?";
   const sqlRespond = `
-    SELECT 
-      public_id, 
-      donor_id, 
-      fname, 
-      lname, 
-      gr, 
-      rh,
-      Lea, 
-      Leb, 
-      mia, 
-      E, 
-      D, 
-      ee, 
-      C, 
-      cc, 
-      P1, 
-      I, 
-      M, 
-      N, 
-      S, 
-      ss, 
-      Fya, 
-      Fyb, 
-      Dia, 
-      Dib, 
-      Jka, 
-      Jkb, 
-      K, 
-      kk, 
-      Xga
+    SELECT *
     FROM donor 
     WHERE public_id = ?
   `;
