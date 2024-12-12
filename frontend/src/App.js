@@ -10,6 +10,7 @@ import ResultPage from "./page/ResultPage";
 import AddBloodInfoPage from "./page/AddBloodInfoPage";
 import HomePage from "./page/HomePage";
 import ProfilePage from "./page/ProfilePage";
+import PrintComponent from "./page/PrintComponent";
 
 const user = "a";
 
@@ -21,6 +22,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/print" element={<PrintComponent />} />
           <Route
             path="/admin/search"
             element={
