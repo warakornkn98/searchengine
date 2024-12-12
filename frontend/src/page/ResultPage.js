@@ -37,8 +37,8 @@ const ResultPage = () => {
   const printRef = useRef();
 
   const minorBloodGroupInfo = (data.minorBloodGroups || [])
-    .filter(group => group.status)
-    .map(group => {
+    .filter((group) => group.status)
+    .map((group) => {
       const mappedName = MINORBLOODGROUP_MAPPING[group.name] || group.name;
       return `${mappedName}${group.status}`;
     })
@@ -98,7 +98,7 @@ const ResultPage = () => {
                 </Text>{" "}
                 <Text style={{ fontSize: "16px" }}>{data.lname || "N/A"}</Text>
               </Col>
-              <Col xs={24}>
+              <Col xs={24} sm={12}>
                 <Text strong style={{ fontSize: "16px" }}>
                   เลขประจำตัวประชาชน:
                 </Text>{" "}
@@ -106,10 +106,17 @@ const ResultPage = () => {
                   {data.public_id || "N/A"}
                 </Text>
               </Col>
+              <Col xs={24} sm={12}>
+                <Text strong style={{ fontSize: "16px" }}>
+                  Donor ID:
+                </Text>{" "}
+                <Text style={{ fontSize: "16px" }}>
+                  {data.donor_id || "N/A"}
+                </Text>
+              </Col>
             </Row>
           </Card>
-
-          {/* Card 2: รายละเอียดผู้บริจาค */}
+          
           <Card
             style={{
               marginBottom: "20px",
@@ -124,14 +131,7 @@ const ResultPage = () => {
             title="รายละเอียดผู้บริจาค"
           >
             <Row gutter={[16, 16]} align="middle">
-              <Col xs={24} sm={12}>
-                <Text strong style={{ fontSize: "16px" }}>
-                  Donor ID:
-                </Text>{" "}
-                <Text style={{ fontSize: "16px" }}>
-                  {data.donor_id || "N/A"}
-                </Text>
-              </Col>
+              
               <Col xs={24} sm={12}>
                 <Text strong style={{ fontSize: "16px" }}>
                   กรุ๊ปเลือด:
@@ -145,12 +145,27 @@ const ResultPage = () => {
                 <Text style={{ fontSize: "16px" }}>{data.rh || "N/A"}</Text>
               </Col>
             </Row>
-            <Title level={5} style={{ marginTop: "20px", fontSize: "16px" }}>
-              กรุ๊ปเลือดย่อย
-            </Title>
-            <Text style={{ fontSize: "16px" }}>
-              {minorBloodGroupInfo || "ไม่มีข้อมูล"}
-            </Text>
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <Title level={5} style={{ fontSize: "16px", margin: 0 }}>
+                  หมู่เลือดย่อย
+                </Title>
+                <span style={{ color: "red", marginLeft: "8px" }}>
+                  *** ข้อมูลหมู่เลือดย่อยอาจจะไม่สมบูรณ์ กรุณาตรวจสอบก่อนใช้งาน ***
+                </span>
+              </div>
+              <Text
+                style={{ fontSize: "16px", display: "block", marginTop: "8px" }}
+              >
+                {minorBloodGroupInfo || "ไม่มีข้อมูล"}
+              </Text>
+            </div>
           </Card>
         </div>
 
