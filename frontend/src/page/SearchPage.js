@@ -90,7 +90,7 @@ const SearchPage = () => {
                 />
               </Form.Item>
 
-              <Form.Item label={`CAPTCHA: ${captchaQuestion.question}`}>
+              <Form.Item label={`ผลลัพธ์ของ ${captchaQuestion.question} คือ`}>
                 <Input
                   placeholder="กรุณากรอกผลลัพธ์"
                   value={captchaInput}
