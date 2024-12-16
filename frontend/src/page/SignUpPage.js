@@ -25,17 +25,19 @@ const SignUpPage = () => {
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
+      console.log(values);
       const response = await axios.post(
         "http://localhost:5000/api/signup",
         values
       );
+      
       message.success("สมัครสมาชิกสำเร็จ");
       form.resetFields();
       navigate("/login");
-    } catch (error) {
-      console.error(error);
+    }  catch (error) {
+      console.error("Error details:", error.response || error.message);
       message.error("เกิดข้อผิดพลาดในการสมัครสมาชิก");
-    } finally {
+    }finally {
       setLoading(false);
     }
   };
@@ -178,7 +180,7 @@ const SignUpPage = () => {
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    name="hospital"
+                    name="agency"
                     label="โรงพยาบาล"
                     rules={[{ required: true, message: "โปรดกรอกชื่อโรงพยาบาล" }]}
                   >

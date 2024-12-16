@@ -15,26 +15,45 @@ import FooterComponents from "./component/Footer";
 import ManageBannerPage from "./page/ManageBannerPage";
 import SignUpPage from "./page/SignUpPage";
 
-import { Layout } from 'antd';
+import { Layout } from "antd";
+import ManageUsersPage from "./page/ManageUsersPage";
+import EditUserPage from "./page/EditUserPage";
 const { Content } = Layout;
-
-const user = "a";
 
 const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Layout>
-
           {/* Navbar */}
           <Navbar />
 
           {/* Content */}
-          <Content style={{ padding: "0 50px", marginTop: 24, minHeight: "calc(100vh - 64px - 70px)" }}>
+          <Content
+            style={{
+              padding: "0 50px",
+              marginTop: 24,
+              minHeight: "calc(100vh - 64px - 70px)",
+            }}
+          >
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/sign-up" element={<SignUpPage />} />
+              {localStorage.getItem("role") === "admin" ? (
+                <>
+                  <Route
+                    path="/manage-user"
+                    element={
+                      <ProtectedRoute>
+                        <ManageUsersPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/edit-profile/:userId" element={<EditUserPage />} />
+                </>
+              ) : null}
+
               <Route path="/print" element={<PrintPage />} />
               <Route
                 path="/admin/search"
@@ -48,7 +67,7 @@ const App = () => {
                 path="/admin/banner"
                 element={
                   <ProtectedRoute>
-                    <ManageBannerPage/>
+                    <ManageBannerPage />
                   </ProtectedRoute>
                 }
               />
@@ -74,7 +93,7 @@ const App = () => {
           </Content>
 
           {/* Footer */}
-          <FooterComponents/>
+          <FooterComponents />
         </Layout>
       </AuthProvider>
     </BrowserRouter>

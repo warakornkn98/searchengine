@@ -56,12 +56,11 @@ exports.login = async (req, res) => {
 };
 
 
-exports.getUserProfile = (req, res) => {
-  const { username } = req.params;
+exports.getUserData = (req, res) => {
+  const { userId } = req.params; // ดึง userId จาก URL params
+  const query = "SELECT * FROM users WHERE id = ?";
 
-  const query = "SELECT id, username, fname, lname, agency, department, position FROM users WHERE username = ?";
-
-  db.query(query, [username], (err, results) => {
+  conn.query(query, [userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: "Internal server error" });
     }
@@ -72,6 +71,24 @@ exports.getUserProfile = (req, res) => {
     return res.status(200).json(results[0]);
   });
 };
+
+
+
+exports.getAllUsers = (req, res) => {
+  const query = "SELECT * FROM users";
+
+  conn.query(query, (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: "No users found" });
+    }
+
+    return res.status(200).json(results);
+  });
+};
+
 
 
 exports.signup = async (req, res) => {
@@ -151,4 +168,25 @@ exports.signup = async (req, res) => {
       message: "Server error",
     });
   }
+};
+
+
+exports.confirmUser = (req, res) => {
+  const { id } = req.params;
+  const role = 'user'
+  console.log(id);
+  
+  const query = "UPDATE users SET role = ? WHERE id= ?";
+
+  conn.query(query, [role, id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json({ message: `User role updated to ${role}` });
+  });
 };
