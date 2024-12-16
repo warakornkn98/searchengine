@@ -13,6 +13,7 @@ import ProfilePage from "./page/ProfilePage";
 import PrintPage from "./page/PrintPage";
 import FooterComponents from "./component/Footer";
 import ManageBannerPage from "./page/ManageBannerPage";
+import SignUpPage from "./page/SignUpPage";
 
 import { Layout } from 'antd';
 const { Content } = Layout;
@@ -33,6 +34,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/sign-up" element={<SignUpPage />} />
               <Route path="/print" element={<PrintPage />} />
               <Route
                 path="/admin/search"

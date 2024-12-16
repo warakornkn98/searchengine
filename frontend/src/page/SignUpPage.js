@@ -9,6 +9,7 @@ import {
   Card,
   Form,
 } from "antd";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +18,8 @@ const { Title } = Typography;
 const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
@@ -64,32 +67,144 @@ const SignUpPage = () => {
               onFinish={handleSubmit}
               style={{ fontSize: 20 }}
             >
-              {[ // User details fields
-                { name: "username", label: "Username", placeholder: "กรอก Username" },
-                { name: "password", label: "Password", placeholder: "กรอก Password", type: "password" },
-                { name: "fname", label: "ชื่อ", placeholder: "กรอกชื่อ" },
-                { name: "lname", label: "นามสกุล", placeholder: "กรอกนามสกุล" },
-                { name: "email", label: "Email", placeholder: "กรอก Email", type: "email" },
-                { name: "phone", label: "เบอร์โทรศัพท์", placeholder: "กรอกเบอร์โทรศัพท์", type: "tel" },
-                { name: "hospital", label: "โรงพยาบาล", placeholder: "กรอกชื่อโรงพยาบาล" },
-                { name: "department", label: "หน่วยงาน", placeholder: "กรอกชื่อหน่วยงาน" },
-                { name: "position", label: "ตำแหน่ง", placeholder: "กรอกตำแหน่ง" },
-              ].map((field) => (
-                <Form.Item
-                  key={field.name}
-                  name={field.name}
-                  label={field.label}
-                  rules={[
-                    { required: true, message: `โปรดกรอก ${field.label}` },
-                  ]}
-                >
-                  <Input
-                    placeholder={field.placeholder}
-                    type={field.type || "text"}
-                    style={{ fontSize: 18 }}
-                  />
-                </Form.Item>
-              ))}
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  <Form.Item
+                    name="username"
+                    label="Username"
+                    rules={[{ required: true, message: "โปรดกรอก Username" }]}
+                  >
+                    <Input placeholder="กรอก Username" style={{ fontSize: 18 }} />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="email"
+                    label="Email"
+                    rules={[{ required: true, message: "โปรดกรอก Email" }]}
+                  >
+                    <Input
+                      placeholder="กรอก Email"
+                      type="email"
+                      style={{ fontSize: 18 }}
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col span={12}>
+                  <Form.Item
+                    name="password"
+                    label="Password"
+                    rules={[{ required: true, message: "โปรดกรอกรหัสผ่าน" }]}
+                  >
+                    <Input
+                      placeholder="กรอกรหัสผ่าน"
+                      type={passwordVisible ? "text" : "password"}
+                      style={{ fontSize: 18 }}
+                      suffix={
+                        <Button
+                          type="text"
+                          icon={passwordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                          onClick={() => setPasswordVisible(!passwordVisible)}
+                        />
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="confirmPassword"
+                    label="ยืนยันรหัสผ่าน"
+                    dependencies={["password"]}
+                    hasFeedback
+                    rules={[
+                      { required: true, message: "โปรดยืนยันรหัสผ่าน" },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(new Error("รหัสผ่านไม่ตรงกัน"));
+                        },
+                      }),
+                    ]}
+                  >
+                    <Input
+                      placeholder="ยืนยันรหัสผ่าน"
+                      type={confirmPasswordVisible ? "text" : "password"}
+                      style={{ fontSize: 18 }}
+                      suffix={
+                        <Button
+                          type="text"
+                          icon={confirmPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                          onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                        />
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col span={12}>
+                  <Form.Item
+                    name="fname"
+                    label="ชื่อ"
+                    rules={[{ required: true, message: "โปรดกรอกชื่อ" }]}
+                  >
+                    <Input placeholder="กรอกชื่อ" style={{ fontSize: 18 }} />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="lname"
+                    label="นามสกุล"
+                    rules={[{ required: true, message: "โปรดกรอกนามสกุล" }]}
+                  >
+                    <Input placeholder="กรอกนามสกุล" style={{ fontSize: 18 }} />
+                  </Form.Item>
+                </Col>
+
+                <Col span={12}>
+                  <Form.Item
+                    name="phone"
+                    label="เบอร์โทรศัพท์"
+                    rules={[{ required: true, message: "โปรดกรอกเบอร์โทรศัพท์" }]}
+                  >
+                    <Input
+                      placeholder="กรอกเบอร์โทรศัพท์"
+                      type="tel"
+                      style={{ fontSize: 18 }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="hospital"
+                    label="โรงพยาบาล"
+                    rules={[{ required: true, message: "โปรดกรอกชื่อโรงพยาบาล" }]}
+                  >
+                    <Input placeholder="กรอกชื่อโรงพยาบาล" style={{ fontSize: 18 }} />
+                  </Form.Item>
+                </Col>
+
+                <Col span={12}>
+                  <Form.Item
+                    name="department"
+                    label="แผนก/หน่วยงาน"
+                    rules={[{ required: true, message: "โปรดกรอกแผนก/หน่วยงาน" }]}
+                  >
+                    <Input placeholder="กรอกแผนก/หน่วยงาน" style={{ fontSize: 18 }} />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="position"
+                    label="ตำแหน่ง"
+                    rules={[{ required: true, message: "โปรดกรอกตำแหน่ง" }]}
+                  >
+                    <Input placeholder="กรอกตำแหน่ง" style={{ fontSize: 18 }} />
+                  </Form.Item>
+                </Col>
+              </Row>
 
               <Form.Item>
                 <Row justify="center" gutter={16}>

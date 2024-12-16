@@ -9,6 +9,7 @@ const SearchPage = () => {
   const [loading, setLoading] = useState(false);
   const [captchaQuestion, setCaptchaQuestion] = useState(generateCaptcha());
   const [captchaInput, setCaptchaInput] = useState("");
+  const [publicId, setPublicId] = useState(""); // ประกาศ state ใหม่
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
@@ -87,6 +88,18 @@ const SearchPage = () => {
                 <Input
                   placeholder="กรุณากรอกรหัสบัตรประจำตัว 13 หลัก"
                   style={{ height: "50px", fontSize: "16px" }}
+                  value={publicId} // ใช้ค่าจาก state
+                  onChange={(e) => {
+                    const inputValue = e.target.value;
+                    // กรองค่าเพื่อรับเฉพาะตัวเลข
+                    const filteredValue = inputValue.replace(/[^0-9]/g, "");
+
+                    // อัพเดทค่าที่กรอกใน state เท่านั้น (แค่ตัวเลข)
+                    setPublicId(filteredValue);
+
+                    // ไม่เก็บค่าอักขระที่ไม่ใช่ตัวเลข
+                    // ถ้าไม่ใช่ตัวเลข จะไม่อัพเดทค่าเลย
+                  }}
                 />
               </Form.Item>
 

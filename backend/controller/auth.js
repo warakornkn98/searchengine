@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require('dotenv').config()
 const SECRET_KEY = process.env.SECRET_KEY;
 const saltRounds = 10;
 const conn = require("../config/db");
@@ -81,7 +82,10 @@ exports.signup = async (req, res) => {
     return res.status(400).json({
       message: "Please provide all required fields",
     });
+
+
   }
+  
 
   try {
     // Check if the username already exists
@@ -100,7 +104,7 @@ exports.signup = async (req, res) => {
       }
 
       // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       // Insert the new user into the database
       const insertUserQuery = `
