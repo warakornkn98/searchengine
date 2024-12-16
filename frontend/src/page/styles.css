@@ -2,3 +2,36 @@
 .custom-table .ant-table-tbody > tr > td {
   font-size: 20px; /* ตั้งค่าขนาดตัวอักษร */
 }
+
+
+/* styles.css */
+@media print {
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+
+  body {
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+  }
+
+  button {
+    display: none; /* ซ่อนปุ่มเมื่อพิมพ์ */
+  }
+
+  h1 {
+    font-size: 24px;
+    color: black;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
+button {
+  z-index: 100;
+  position: relative;
+}

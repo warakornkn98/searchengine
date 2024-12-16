@@ -1,34 +1,26 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import ComponentToPrint from "../component/ComponentToPrint";
+import "./styles.css";
 
-const PrintPage = () => {
-  const componentRef = React.useRef(null);
+const PrintableComponent = React.forwardRef((props, ref) => (
+  <div ref={ref}>
+    <h1>รายงาน</h1>
+    <p>นี่คือหน้าสำหรับการพิมพ์</p>
+  </div>
+));
 
-  const handleAfterPrint = React.useCallback(() => {
-    console.log("Printing completed.");
-  }, []);
-
-  const handleBeforePrint = React.useCallback(() => {
-    console.log("Preparing to print...");
-  }, []);
-
-  const printFn = useReactToPrint({
-    content: () => componentRef.current,
-    documentTitle: "PrintDocument",
-    onAfterPrint: handleAfterPrint,
-    onBeforePrint: handleBeforePrint,
+const App = () => {
+  const componentRef = useRef(); // ใช้ useRef เพื่อสร้างตัวอ้างอิง
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current, // คืนค่าตัวอ้างอิงของ Component
   });
 
   return (
     <div>
-      <h1>React-to-Print Example</h1>
-      <button onClick={printFn} style={{ margin: "20px", padding: "10px" }}>
-        Print
-      </button>
-      <ComponentToPrint ref={componentRef} />
+      <button onClick={handlePrint}>พิมพ์เอกสาร</button>
+      <PrintableComponent ref={componentRef} /> {/* เชื่อม ref เข้ากับ Component */}
     </div>
   );
 };
 
-export default PrintPage;
+export default App;
