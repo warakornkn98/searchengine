@@ -60,7 +60,7 @@ const App = () => {
             }
           />
         </Routes>
-        <FooterComponents/>
+        {/* <FooterComponents/> */}
       </AuthProvider>
     </BrowserRouter>
   );
