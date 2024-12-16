@@ -3,13 +3,13 @@ import { Layout, Row, Col } from 'antd';
 const { Footer } = Layout;
 
 const FooterComponents = () => (
-    <Footer style={{ background: '#001529', color: 'white', textAlign: 'center', margin: '20px 0 0 0' }}>
+    <Footer style={{ background: '#001529', color: 'white', textAlign: 'center', marginTop: 'auto', position: 'fixed', bottom: 0, width: '100%' }}>
         <Row>
             <Col span={24}>
                 <div>
-                    <p>โรงพยาบาลสงขลานครินทร์ องค์กรวิจัยนำ</p>
+                    <p>โรงพยาบาลสงขลานครินทร์</p>
                     <p>ที่อยู่: 15 ถนน กาญจนวนิชย์ ตำบลหาดใหญ่ อำเภอหาดใหญ่ จังหวัดสงขลา 90110</p>
-                    <p>โทรศัพท์ : 074 - 451040</p>
+                    <p>โทรศัพท์ : 074-451040</p>
                     <p>อีเมล : Premium@medicine.psu.ac.th</p>
                 </div>
                 <div>
@@ -21,7 +21,7 @@ const FooterComponents = () => (
                     {/* Place social media icons here */}
                 </div>
                 <div>
-                    <p>© 2024 Faculty of Medicine, Prince of Songkla University</p>
+                    <p>© 2024 Prince of Songkla University</p>
                 </div>
             </Col>
         </Row>
