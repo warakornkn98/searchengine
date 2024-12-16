@@ -11,6 +11,7 @@ import AddBloodInfoPage from "./page/AddBloodInfoPage";
 import HomePage from "./page/HomePage";
 import ProfilePage from "./page/ProfilePage";
 import PrintPage from "./page/PrintPage";
+import FooterComponents from "./component/Footer";
 
 const user = "a";
 
@@ -50,6 +51,8 @@ const App = () => {
             }
           />
         </Routes>
+        <FooterComponents>
+        </FooterComponents>
       </AuthProvider>
     </BrowserRouter>
   );

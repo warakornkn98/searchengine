@@ -18,7 +18,7 @@ const Banner = () => {
     >
       <Image
         preview={false}
-        src="https://scontent-bkk1-1.xx.fbcdn.net/v/t39.30808-6/468874899_996379619201327_5751534091052327281_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFHufsMQOygGIqyTFSHZffUu25pJpnngKe7bmkmmeeAp86Eh94TDHnKZL4nZdXFB_LXd-byqnlrNJGgUTBwCQcT&_nc_ohc=U4o3Z_jQYwQQ7kNvgEjhF78&_nc_zt=23&_nc_ht=scontent-bkk1-1.xx&_nc_gid=A1KvYVdwN0dULWp3RSK2XYh&oh=00_AYDNrbhDA0yhmLBpvBBPXnc10wHkaNOwzXQEftjyKgnkPw&oe=675C2AB1"
+        src="https://scontent-bkk1-2.xx.fbcdn.net/v/t39.30808-6/469117775_998209025685053_6557459382835359644_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeF_XgU38DTWkq341tH7A8U_M-iixnMPTfMz6KLGcw9N855NU7SKgrpHbPyk2OWAU8GvijGWUfYowBkLqU7WmPnX&_nc_ohc=qobJwcKg-VcQ7kNvgEIzvML&_nc_zt=23&_nc_ht=scontent-bkk1-2.xx&_nc_gid=A8V8H2u7qClsYSiwd47pPzU&oh=00_AYBSgSFwOX-pv5lPwgtK4CCK64XzIQq-L_sTwgEA7nR1rw&oe=676561DE"
         alt="Banner"
         style={{
           marginBottom: "20px",
