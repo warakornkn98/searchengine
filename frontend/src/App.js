@@ -11,11 +11,8 @@ import AddBloodInfoPage from "./page/AddBloodInfoPage";
 import HomePage from "./page/HomePage";
 import ProfilePage from "./page/ProfilePage";
 import PrintPage from "./page/PrintPage";
-<<<<<<< Updated upstream
 import FooterComponents from "./component/Footer";
-=======
 import ManageBannerPage from "./page/ManageBannerPage";
->>>>>>> Stashed changes
 
 const user = "a";
 
@@ -63,8 +60,7 @@ const App = () => {
             }
           />
         </Routes>
-        <FooterComponents>
-        </FooterComponents>
+        <FooterComponents/>
       </AuthProvider>
     </BrowserRouter>
   );

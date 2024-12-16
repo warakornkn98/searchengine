@@ -7,8 +7,6 @@ const bodyParse = require('body-parser')
 
 const path = require('path');
 
-
-
 app.use(morgan('dev'))
 app.use(cors())
 app.use(bodyParse.json({limit:'10mb'}))
