@@ -3,7 +3,17 @@ import { Layout, Row, Col } from 'antd';
 const { Footer } = Layout;
 
 const FooterComponents = () => (
-    <Footer style={{ background: '#001529', color: 'white', textAlign: 'center', marginTop: 'auto', position: 'fixed', bottom: 0, width: '100%' }}>
+    <Footer
+        style={{
+            background: '#001529',
+            color: 'white',
+            textAlign: 'center',
+            marginTop: 'auto',
+            position: 'relative', // เปลี่ยนจาก fixed เป็น relative
+            bottom: 0,
+            width: '100%',
+        }}
+    >
         <Row>
             <Col span={24}>
                 <div>

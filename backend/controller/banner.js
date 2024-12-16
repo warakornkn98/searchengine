@@ -14,15 +14,16 @@ exports.getAllBanners = (req, res) => {
 
 // เพิ่ม Banner
 exports.addBanner = (req, res) => {
-  console.log(req.body); // ตรวจสอบ body
-  console.log(req.file); // ตรวจสอบ file
+  console.log(req.body);
+  console.log(req.file);
 
-  
   const { title } = req.body;
+
   if (!req.file) {
     console.log('File not provided in request.');
     return res.status(400).json({ error: 'File is required' });
   }
+
   const imageUrl = `/uploads/${req.file.filename}`;
   const sql = 'INSERT INTO banners (title, image_url) VALUES (?, ?)';
   conn.query(sql, [title, imageUrl], (err, result) => {
