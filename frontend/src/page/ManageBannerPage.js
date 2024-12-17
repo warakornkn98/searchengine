@@ -67,7 +67,9 @@ const ManageBannerPage = () => {
       title: "Image",
       dataIndex: "imageUrl",
       key: "imageUrl",
-      render: (text) => <img src={text} alt="Banner" style={{ width: 100 }} />,
+      render: (text, record) => (
+        <img src={`http://localhost:5000${record.image_url}`} alt="Banner" style={{ width: 100 }} />
+      ),
     },
     {
       title: "Action",
