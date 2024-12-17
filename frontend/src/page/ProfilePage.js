@@ -8,6 +8,8 @@ const { Title, Text } = Typography;
 const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const { userData } = useAuth();
+  console.log(userData);
+  
 
   if (loading) {
     return (

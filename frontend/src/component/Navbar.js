@@ -28,7 +28,7 @@ const { useBreakpoint } = Grid;
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, userData } = useAuth();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const screens = useBreakpoint();
 
@@ -59,7 +59,6 @@ const Navbar = () => {
     </Menu>
   );
 
-  // เมนูลิงก์ทั่วไป
   const renderLinks = (isDrawer = false) => (
     <>
       <MenuLink
@@ -82,12 +81,23 @@ const Navbar = () => {
             label="เพิ่มข้อมูลเลือด"
             isDrawer={isDrawer}
           />
-          <MenuLink
-            to="/manage-user"
-            icon={<UsergroupAddOutlined />}
-            label="จัดการผู้ใช้"
-            isDrawer={isDrawer}
-          />
+          {/* ตรวจสอบ role ก่อนแสดงแท็บ จัดการผู้ใช้ */}
+          {userData?.role === "admin" && (
+            <>
+            <MenuLink
+              to="/manage-user"
+              icon={<UsergroupAddOutlined />}
+              label="จัดการผู้ใช้"
+              isDrawer={isDrawer}
+            />
+            <MenuLink
+              to="/banner"
+              icon={<UsergroupAddOutlined />}
+              label="จัดการแบนเนอร์"
+              isDrawer={isDrawer}
+            />
+            </>
+          )}
           {isDrawer ? (
             <>
               <MenuLink
@@ -110,7 +120,7 @@ const Navbar = () => {
             <Dropdown overlay={profileMenu} trigger={["click"]}>
               <Space>
                 <Avatar style={{ backgroundColor: "#87d068" }} />
-                <span style={{ color: "white" }}>ชื่อผู้ใช้</span>
+                <span style={{ color: "white" }}>{userData?.username || "ชื่อผู้ใช้"}</span>
               </Space>
             </Dropdown>
           )}

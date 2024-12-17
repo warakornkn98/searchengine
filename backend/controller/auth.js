@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-require('dotenv').config()
+require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY;
 const saltRounds = 10;
 const conn = require("../config/db");
@@ -30,6 +30,14 @@ exports.login = async (req, res) => {
 
     const user = results[0];
 
+    // Check if user role is 'unconfirmed'
+    if (user.role === "unconfirmed") {
+      return res.status(403).json({
+        message: "รอการยืนยันผู้ใช้จากแอดมิน", // Awaiting admin confirmation
+      });
+    }
+
+    // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
@@ -37,10 +45,17 @@ exports.login = async (req, res) => {
       });
     }
 
+    // Generate JWT token
     const payload = {
       user: {
-        username: user.username,
-        role: user.role,
+        id: user.id, // จากฐานข้อมูล
+        username: user.username, // จากฐานข้อมูล
+        fname: user.fname || "N/A", // ถ้าไม่มีข้อมูลใส่ค่า "N/A"
+        lname: user.lname || "N/A",
+        agency: user.agency || "N/A",
+        department: user.department || "N/A",
+        position: user.position || "N/A",
+        role: user.role || "N/A",
       },
     };
 
@@ -54,7 +69,6 @@ exports.login = async (req, res) => {
     });
   });
 };
-
 
 exports.getUserData = (req, res) => {
   const { userId } = req.params; // ดึง userId จาก URL params
@@ -72,8 +86,6 @@ exports.getUserData = (req, res) => {
   });
 };
 
-
-
 exports.getAllUsers = (req, res) => {
   const query = "SELECT * FROM users";
 
@@ -89,20 +101,35 @@ exports.getAllUsers = (req, res) => {
   });
 };
 
-
-
 exports.signup = async (req, res) => {
-  const { username, password, fname, lname, email, phone, agency, department, position } = req.body;
+  const {
+    username,
+    password,
+    fname,
+    lname,
+    email,
+    phone,
+    agency,
+    department,
+    position,
+  } = req.body;
 
   // Check if all required fields are provided
-  if (!username || !password || !fname || !lname || !email || !phone || !agency || !department || !position) {
+  if (
+    !username ||
+    !password ||
+    !fname ||
+    !lname ||
+    !email ||
+    !phone ||
+    !agency ||
+    !department ||
+    !position
+  ) {
     return res.status(400).json({
       message: "Please provide all required fields",
     });
-
-
   }
-  
 
   try {
     // Check if the username already exists
@@ -125,12 +152,22 @@ exports.signup = async (req, res) => {
 
       // Insert the new user into the database
       const insertUserQuery = `
-        INSERT INTO users (username, password, fname, lname, email, phone, agency, department, position) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO users (username, password, fname, lname, email, phone, agency, department, position, role) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'unconfirmed')
       `;
       conn.execute(
         insertUserQuery,
-        [username, hashedPassword, fname, lname, email, phone, agency, department, position],
+        [
+          username,
+          hashedPassword,
+          fname,
+          lname,
+          email,
+          phone,
+          agency,
+          department,
+          position,
+        ],
         (err, result) => {
           if (err) {
             return res.status(500).json({
@@ -170,12 +207,11 @@ exports.signup = async (req, res) => {
   }
 };
 
-
 exports.confirmUser = (req, res) => {
   const { id } = req.params;
-  const role = 'user'
+  const role = "user";
   console.log(id);
-  
+
   const query = "UPDATE users SET role = ? WHERE id= ?";
 
   conn.query(query, [role, id], (err, results) => {
@@ -193,10 +229,20 @@ exports.confirmUser = (req, res) => {
 
 exports.updateUser = (req, res) => {
   const { userId } = req.params; // ดึง userId จาก URL params
-  const { username, fname, lname, email, phone, agency, department, position } = req.body;
+  const { username, fname, lname, email, phone, agency, department, position } =
+    req.body;
 
   // Check if all required fields are provided
-  if (!username || !fname || !lname || !email || !phone || !agency || !department || !position) {
+  if (
+    !username ||
+    !fname ||
+    !lname ||
+    !email ||
+    !phone ||
+    !agency ||
+    !department ||
+    !position
+  ) {
     return res.status(400).json({
       message: "Please provide all required fields",
     });
@@ -207,17 +253,31 @@ exports.updateUser = (req, res) => {
     WHERE id = ?
   `;
 
-  conn.query(query, [username, fname, lname, email, phone, agency, department, position, userId], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: "Internal server error" });
-    }
+  conn.query(
+    query,
+    [
+      username,
+      fname,
+      lname,
+      email,
+      phone,
+      agency,
+      department,
+      position,
+      userId,
+    ],
+    (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
 
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ error: "User not found" });
-    }
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
-    return res.status(200).json({ message: "User updated successfully" });
-  });
+      return res.status(200).json({ message: "User updated successfully" });
+    }
+  );
 };
 
 exports.updatePassword = async (req, res) => {

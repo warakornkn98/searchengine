@@ -35,12 +35,12 @@ const ManageUsersPage = () => {
 
   const handleEdit = (userId) => {
     console.log(userId);
-    
+
     navigate(`/edit-profile/${userId}`);
   };
 
-  const handleEditPassword = (userId) => { 
-    navigate(`/edit-password/${userId}`); 
+  const handleEditPassword = (userId) => {
+    navigate(`/edit-password/${userId}`);
   };
 
   const columns = [
@@ -68,36 +68,39 @@ const ManageUsersPage = () => {
       title: "Role",
       dataIndex: "role",
       key: "role",
+      render: (role, record) =>
+        role === "unconfirmed" ? (
+          <Popconfirm
+            title="ยืนยันการสมัครสมาชิก?"
+            onConfirm={() => handleConfirm(record.id)}
+            okText="ใช่"
+            cancelText="ยกเลิก"
+          >
+            <Button type="primary">ยืนยันสมาชิก</Button>
+          </Popconfirm>
+        ) : (
+          role
+        ),
     },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <div>
-          {record.role === null ? (
-            <Popconfirm
-              title="ยืนยันการสมัครสมาชิก?"
-              onConfirm={() => handleConfirm(record.id)}
-              okText="ใช่"
-              cancelText="ยกเลิก"
-            >
-              <Button type="primary">ยืนยันสมัครสมาชิก</Button>
-            </Popconfirm>
-          ) : (
-            <>
-              <Button onClick={() => handleEdit(record.id)} type="primary" style={{ marginRight: 8 }}>
-                แก้ไขข้อมูล
-              </Button>
-              <Button onClick={() => handleEditPassword(record.id)} type="default">
-                แก้ไขรหัสผ่าน
-              </Button>
-            </>
-          )}
+          <Button
+            onClick={() => handleEdit(record.id)}
+            type="primary"
+            style={{ marginRight: 8 }}
+          >
+            แก้ไขข้อมูล
+          </Button>
+          <Button onClick={() => handleEditPassword(record.id)} type="default">
+            แก้ไขรหัสผ่าน
+          </Button>
         </div>
       ),
     },
   ];
-  
 
   return (
     <div>

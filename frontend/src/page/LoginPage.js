@@ -21,12 +21,18 @@ const LoginPage = () => {
       navigate("/admin/search");
       message.success("Login successful!");
     } catch (error) {
-      message.error("Invalid credentials!");
+      if (error.response && error.response.data && error.response.data.message) {
+        // แสดงข้อความ error จากหลังบ้าน
+        message.error(error.response.data.message);
+      } else {
+        // แสดงข้อความ default ถ้าไม่มี error message จากหลังบ้าน
+        message.error("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <div
       style={{
