@@ -91,7 +91,7 @@ const Navbar = () => {
               isDrawer={isDrawer}
             />
             <MenuLink
-              to="/banner"
+              to="/admin/banner"
               icon={<UsergroupAddOutlined />}
               label="จัดการแบนเนอร์"
               isDrawer={isDrawer}
