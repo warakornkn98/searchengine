@@ -83,7 +83,7 @@ const EditPasswordPage = () => {
                   </Button>
                 </Col>
                 <Col>
-                  <Button onClick={() => form.resetFields()}>ล้างข้อมูล</Button>
+                  <Button onClick={() => navigate("/manage-user")}>ย้อนกลับ</Button>
                 </Col>
               </Row>
             </Form>

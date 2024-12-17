@@ -48,10 +48,6 @@ const EditUserPage = () => {
     }
   };
 
-  if (!userData) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div style={{ padding: "20px", fontSize: 20 }}>
       <Row justify="center">
@@ -118,7 +114,7 @@ const EditUserPage = () => {
                   </Button>
                 </Col>
                 <Col>
-                  <Button onClick={() => form.resetFields()}>ล้างข้อมูล</Button>
+                  <Button onClick={() => navigate("/manage-user")}>ย้อนกลับ</Button>
                 </Col>
               </Row>
             </Form>
