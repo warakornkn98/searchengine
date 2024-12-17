@@ -75,33 +75,42 @@ const SearchPage = () => {
               }}
             >
               <Form.Item
-                label="เลขประจำตัวประชาชน"
-                name="public_id"
-                rules={[
-                  { required: true, message: "กรุณากรอกเลขประจำตัวประชาชน" },
-                  {
-                    pattern: /^[0-9]{13}$/,
-                    message: "เลขประจำตัวประชาชนต้องเป็นตัวเลข 13 หลัก",
-                  },
-                ]}
-              >
-                <Input
-                  placeholder="กรุณากรอกรหัสบัตรประจำตัว 13 หลัก"
-                  style={{ height: "50px", fontSize: "16px" }}
-                  value={publicId} // ใช้ค่าจาก state
-                  onChange={(e) => {
-                    const inputValue = e.target.value;
-                    // กรองค่าเพื่อรับเฉพาะตัวเลข
-                    const filteredValue = inputValue.replace(/[^0-9]/g, "");
+  label="เลขประจำตัวประชาชน"
+  name="public_id"
+  rules={[
+    { required: true, message: "กรุณากรอกเลขประจำตัวประชาชน" },
+    {
+      pattern: /^[0-9]{13}$/,
+      message: "เลขประจำตัวประชาชนต้องเป็นตัวเลข 13 หลัก",
+    },
+  ]}
+>
+  <Input
+    placeholder="กรุณากรอกรหัสบัตรประจำตัว 13 หลัก"
+    style={{ height: "50px", fontSize: "16px" }}
+    maxLength={13} // ล็อกให้กรอกได้แค่ 13 ตัวอักษร
+    inputMode="numeric" // กำหนดให้มีแป้นพิมพ์ที่เป็นตัวเลข
+    value={publicId} // ใช้ค่าจาก state
+    onChange={(e) => {
+      const inputValue = e.target.value;
+      // กรองค่าเพื่อรับเฉพาะตัวเลข
+      const filteredValue = inputValue.replace(/[^0-9]/g, "");
 
-                    // อัพเดทค่าที่กรอกใน state เท่านั้น (แค่ตัวเลข)
-                    setPublicId(filteredValue);
+      // อัพเดทค่าที่กรอกใน state เท่านั้น (แค่ตัวเลข)
+      setPublicId(filteredValue);
 
-                    // ไม่เก็บค่าอักขระที่ไม่ใช่ตัวเลข
-                    // ถ้าไม่ใช่ตัวเลข จะไม่อัพเดทค่าเลย
-                  }}
-                />
-              </Form.Item>
+      // ไม่เก็บค่าอักขระที่ไม่ใช่ตัวเลข
+      // ถ้าไม่ใช่ตัวเลข จะไม่อัพเดทค่าเลย
+    }}
+    onKeyPress={(e) => {
+      if (!/[0-9]/.test(e.key)) {
+        e.preventDefault(); // ป้องกันการพิมพ์อักขระที่ไม่ใช่ตัวเลข
+      }
+    }}
+  />
+</Form.Item>
+
+
 
               <Form.Item label={`ผลลัพธ์ของ ${captchaQuestion.question} คือ`}>
                 <Input

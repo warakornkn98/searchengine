@@ -39,8 +39,8 @@ const ManageUsersPage = () => {
     navigate(`/edit-profile/${userId}`);
   };
 
-  const handleAddUser = () => {
-    navigate("/add-user"); // นำทางไปหน้า AddUser
+  const handleEditPassword = (userId) => { 
+    navigate(`/edit-password/${userId}`); 
   };
 
   const columns = [
@@ -53,6 +53,16 @@ const ManageUsersPage = () => {
       title: "Email",
       dataIndex: "email",
       key: "email",
+    },
+    {
+      title: "First Name",
+      dataIndex: "fname",
+      key: "fname",
+    },
+    {
+      title: "Last Name",
+      dataIndex: "lname",
+      key: "lname",
     },
     {
       title: "Role",
@@ -74,21 +84,24 @@ const ManageUsersPage = () => {
               <Button type="primary">ยืนยันสมัครสมาชิก</Button>
             </Popconfirm>
           ) : (
-            <Button onClick={() => handleEdit(record.id)} type="primary">
-              แก้ไขข้อมูล
-            </Button>
+            <>
+              <Button onClick={() => handleEdit(record.id)} type="primary" style={{ marginRight: 8 }}>
+                แก้ไขข้อมูล
+              </Button>
+              <Button onClick={() => handleEditPassword(record.id)} type="default">
+                แก้ไขรหัสผ่าน
+              </Button>
+            </>
           )}
         </div>
       ),
     },
   ];
+  
 
   return (
     <div>
       <h2>จัดการข้อมูลสมาชิก</h2>
-      <Button type="primary" onClick={handleAddUser} style={{ marginBottom: 20 }}>
-        เพิ่มสมาชิก
-      </Button>
       <Table columns={columns} dataSource={users} rowKey="id" />
     </div>
   );

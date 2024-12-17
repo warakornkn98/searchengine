@@ -190,3 +190,65 @@ exports.confirmUser = (req, res) => {
     return res.status(200).json({ message: `User role updated to ${role}` });
   });
 };
+
+exports.updateUser = (req, res) => {
+  const { userId } = req.params; // ดึง userId จาก URL params
+  const { username, fname, lname, email, phone, agency, department, position } = req.body;
+
+  // Check if all required fields are provided
+  if (!username || !fname || !lname || !email || !phone || !agency || !department || !position) {
+    return res.status(400).json({
+      message: "Please provide all required fields",
+    });
+  }
+
+  const query = `
+    UPDATE users SET username = ?, fname = ?, lname = ?, email = ?, phone = ?, agency = ?, department = ?, position = ?
+    WHERE id = ?
+  `;
+
+  conn.query(query, [username, fname, lname, email, phone, agency, department, position, userId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json({ message: "User updated successfully" });
+  });
+};
+
+exports.updatePassword = async (req, res) => {
+  const { userId } = req.params;
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({
+      message: "Please provide a new password",
+    });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const query = "UPDATE users SET password = ? WHERE id = ?";
+
+    conn.execute(query, [hashedPassword, userId], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      return res.status(200).json({ message: "Password updated successfully" });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};

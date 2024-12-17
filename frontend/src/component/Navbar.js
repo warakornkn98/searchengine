@@ -19,6 +19,7 @@ import {
   UserOutlined,
   PlusOutlined,
   MenuOutlined,
+  UsergroupAddOutlined, // เพิ่มไอคอนสำหรับ Manage User
 } from "@ant-design/icons";
 import { useAuth } from "../context/AuthContext";
 
@@ -79,6 +80,12 @@ const Navbar = () => {
             to="/admin/addbloodinfo"
             icon={<PlusOutlined />}
             label="เพิ่มข้อมูลเลือด"
+            isDrawer={isDrawer}
+          />
+          <MenuLink
+            to="/manage-user"
+            icon={<UsergroupAddOutlined />}
+            label="จัดการผู้ใช้"
             isDrawer={isDrawer}
           />
           {isDrawer ? (

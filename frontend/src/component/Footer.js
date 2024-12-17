@@ -23,10 +23,6 @@ const FooterComponents = () => (
                     <p>อีเมล : Premium@medicine.psu.ac.th</p>
                 </div>
                 <div>
-                    <p>การเดินทาง:</p>
-                    {/* Place your map here */}
-                </div>
-                <div>
                     <p>Follow us:</p>
                     {/* Place social media icons here */}
                 </div>

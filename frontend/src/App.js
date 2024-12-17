@@ -18,6 +18,7 @@ import SignUpPage from "./page/SignUpPage";
 import { Layout } from "antd";
 import ManageUsersPage from "./page/ManageUsersPage";
 import EditUserPage from "./page/EditUserPage";
+import EditPasswordPage from "./page/EditPassword";
 const { Content } = Layout;
 
 const App = () => {
@@ -40,7 +41,7 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/sign-up" element={<SignUpPage />} />
-              {localStorage.getItem("role") === "admin" ? (
+              {true? (
                 <>
                   <Route
                     path="/manage-user"
@@ -51,6 +52,7 @@ const App = () => {
                     }
                   />
                   <Route path="/edit-profile/:userId" element={<EditUserPage />} />
+                  <Route path="/edit-password/:userId" element={<EditPasswordPage />} />
                 </>
               ) : null}
 

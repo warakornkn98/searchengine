@@ -1,14 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
-import { Card, Form, Input, Button, message } from "antd";
+import React, { useState } from "react"; // <-- Ensure useState is imported here
+import { useNavigate, Navigate, Link } from "react-router-dom";
+import { Card, Form, Input, Button, message, Row, Col } from "antd"; // <-- Added Row and Col
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
-  const { isAuthenticated } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
     return <Navigate to="/admin/search" />;
@@ -19,8 +18,7 @@ const LoginPage = () => {
       setLoading(true);
       const { data } = await api.post("/login", values);
       login(data.token);
-      console.log(data.token);
-      navigate('/admin/search')
+      navigate("/admin/search");
       message.success("Login successful!");
     } catch (error) {
       message.error("Invalid credentials!");
@@ -64,6 +62,15 @@ const LoginPage = () => {
             <Button type="primary" htmlType="submit" loading={loading} block>
               Login
             </Button>
+          </Form.Item>
+          <Form.Item>
+            <Row justify="end">
+              <Col>
+                <Button type="link" htmlType="button">
+                  <Link to="/sign-up">Sign Up</Link>
+                </Button>
+              </Col>
+            </Row>
           </Form.Item>
         </Form>
       </Card>
