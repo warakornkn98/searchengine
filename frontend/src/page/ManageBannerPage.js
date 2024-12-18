@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
+import api from "../utils/api";
+
 
 const ManageBannerPage = () => {
   const [banners, setBanners] = useState([]);
@@ -14,7 +16,7 @@ const ManageBannerPage = () => {
 
   const fetchBanners = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/banner");
+      const response = await api.get("/banner");
       setBanners(response.data);
     } catch (error) {
       console.error("Error fetching banners:", error);
@@ -35,7 +37,7 @@ const ManageBannerPage = () => {
       }
 
       // ส่งข้อมูลผ่าน axios
-      await axios.post("http://localhost:5000/api/banner", formData, {
+      await api.post("/banner", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -51,7 +53,7 @@ const ManageBannerPage = () => {
 
   const handleDeleteBanner = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/banner/${id}`);
+      await api.delete(`/banner/${id}`);
       message.success("Banner deleted successfully!");
       fetchBanners();
     } catch (error) {

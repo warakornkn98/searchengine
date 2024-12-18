@@ -3,6 +3,7 @@ import { Input, Row, Col, message, Button, Typography, Card, Form } from "antd";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import api from "../utils/api";
 
 const { Title } = Typography;
 
@@ -16,7 +17,7 @@ const EditPasswordPage = () => {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/user/${userId}`);
+      const response = await api.get(`/user/${userId}`);
       setUserData(response.data);
       form.setFieldsValue({ username: response.data.username });
     } catch (error) {
@@ -32,7 +33,7 @@ const EditPasswordPage = () => {
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:5000/api/updatePassword/${userId}`, values);
+      await api.put(`/updatePassword/${userId}`, values);
       message.success("Password updated successfully");
       navigate("/manage-user");
     } catch (error) {

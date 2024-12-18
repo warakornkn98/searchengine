@@ -12,6 +12,7 @@ import {
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/api";
 
 const { Title } = Typography;
 
@@ -26,8 +27,8 @@ const SignUpPage = () => {
     setLoading(true);
     try {
       console.log(values);
-      const response = await axios.post(
-        "http://localhost:5000/api/signup",
+      const response = await api.post(
+        `/signup`,
         values
       );
       

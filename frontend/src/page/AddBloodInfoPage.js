@@ -14,6 +14,8 @@ import {
 } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/api";
+
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -57,8 +59,8 @@ const AddBloodInfoPage = () => {
     const requestData = { ...values, minorBloodGroups: selectedMinorBloodGroups };
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/addbloodinfo",
+      const response = await api.post(
+        "/addbloodinfo",
         requestData
       );
 

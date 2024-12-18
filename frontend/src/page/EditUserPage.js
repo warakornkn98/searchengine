@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Input, Row, Col, message, Button, Typography, Card, Form, Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import api from "../utils/api";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -15,7 +16,7 @@ const EditUserPage = () => {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/user/${userId}`);
+      const response = await api.get(`/user/${userId}`);
       console.log("User data:", response.data);
       setUserData(response.data);
       form.setFieldsValue(response.data);
@@ -37,7 +38,7 @@ const EditUserPage = () => {
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.put(`http://localhost:5000/api/updateUser/${userId}`, values);
+      const response = await api.put(`/updateUser/${userId}`, values);
       message.success("แก้ไขข้อมูลสำเร็จ");
       navigate("/manage-users");
     } catch (error) {

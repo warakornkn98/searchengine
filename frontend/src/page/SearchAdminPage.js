@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
+import api from "../utils/api";
 
 const { Title, Text } = Typography;
 
@@ -45,7 +46,7 @@ const SearchAdminPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:5000/api/bloodinfo");
+        const response = await api.get("/bloodinfo");
         const responseData = response.data;
         setData(responseData);
         setFilteredData(responseData);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, message, Popconfirm } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/api";
 
 const ManageUsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -10,7 +11,7 @@ const ManageUsersPage = () => {
   // ฟังก์ชั่นดึงข้อมูลสมาชิก
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/users"); // API ดึงข้อมูลสมาชิกทั้งหมด
+      const response = await api.get("/users"); // API ดึงข้อมูลสมาชิกทั้งหมด
       setUsers(response.data);
     } catch (error) {
       console.error(error);
@@ -24,7 +25,7 @@ const ManageUsersPage = () => {
 
   const handleConfirm = async (userId) => {
     try {
-      await axios.post(`http://localhost:5000/api/confirm-user/${userId}`);
+      await api.post(`/confirm-user/${userId}`);
       message.success("ยืนยันการสมัครสมาชิกสำเร็จ");
       fetchUsers();
     } catch (error) {

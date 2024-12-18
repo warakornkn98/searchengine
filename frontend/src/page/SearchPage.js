@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Layout, Input, Button, Form, Row, Col, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 
 const { Content } = Layout;
 
@@ -22,8 +22,8 @@ const SearchPage = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/bloodinfo",
+      const response = await api.post(
+        `/bloodinfo`,
         values
       );
       const data = response.data;

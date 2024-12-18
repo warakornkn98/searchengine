@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Carousel, Spin, Alert } from 'antd';
 import axios from 'axios';
+import api from "../utils/api";
+const ImageUrl = process.env.REACT_APP_IMAGE_BASE_URL;
 
 const Banner = () => {
   const [banners, setBanners] = useState([]);
@@ -8,7 +10,7 @@ const Banner = () => {
   const [error, setError] = useState(null);    // สถานะ Error
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/banner')
+    api.get('/banner')
       .then((response) => {
         setBanners(response.data);
         setLoading(false); // หยุด Loading เมื่อดึงข้อมูลสำเร็จ
@@ -41,7 +43,7 @@ const Banner = () => {
       {banners.map((banner) => (
         <div key={banner.id} style={{ position: 'relative' }}>
           <img
-            src={`http://localhost:5000${banner.image_url}`} // ใช้ Base URL และ image_url จาก API
+            src={`${ImageUrl}${banner.image_url}`} // ใช้ Base URL และ image_url จาก API
             alt={banner.title}
             style={{
               width: '100%', // กำหนดให้ภาพเต็มความกว้าง
