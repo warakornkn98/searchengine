@@ -23,7 +23,7 @@ const { Content } = Layout;
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={'/react-test'}>
       <AuthProvider>
         <Layout>
           {/* Navbar */}
