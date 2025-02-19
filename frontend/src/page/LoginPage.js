@@ -10,7 +10,7 @@ const LoginPage = () => {
   const { login, isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to="/admin/search" />;
+    return <Navigate to="/form" />;
   }
 
   const onFinish = async (values) => {
@@ -18,7 +18,7 @@ const LoginPage = () => {
       setLoading(true);
       const { data } = await api.post("/login", values);
       login(data.token);
-      navigate("/admin/search");
+      navigate("/form");
       message.success("Login successful!");
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
